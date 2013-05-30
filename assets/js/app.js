@@ -44,15 +44,33 @@ define([
 	
 	/**
 	 * Digitalize UI Events to App singleton
-	 * every piece of logic will listen to App Events!
+	 * every piece of application logic will listen to App Events!
 	 */
+	
+	var _eventDelay = 250;
 	
 	var _resizeEvt = null;
 	$(window).resize(function(e) {
 		clearTimeout(_resizeEvt);
 		_resizeEvt = setTimeout(function() {
 			window.App.trigger('resize', [e]);
-		}, 50);
+		}, _eventDelay);
+	});
+	
+	var _mousemoveEvt = null;
+	$(window).mousemove(function(e) {
+		clearTimeout(_mousemoveEvt);
+		_mousemoveEvt = setTimeout(function() {
+			window.App.trigger('mousemove', [e]);
+		}, _eventDelay);
+	});
+	
+	var _scrollEvt = null;
+	$(window).scroll(function(e) {
+		clearTimeout(_scrollEvt);
+		_scrollEvt = setTimeout(function() {
+			window.App.trigger('scroll', [e]);
+		}, _eventDelay);
 	});
 	
 	$(document).on('keydown', function(e) {
