@@ -1,0 +1,48 @@
+/**
+ * ---[[   B O I L E R P L A T E   ]]---
+ * JqueryMobile + BackboneJS + RequireJS
+ * =====================================
+ * 
+ * Main LESS Project
+ * - import JQM structure or theme
+ * - apply custom rules
+ *
+ */
+
+
+// jQueryMobile
+//@import "theme";			// jqm custom theme
+//@import "jqm-structure";	// jqm structure
+@import "jqm";				// default layout, useful when prototyping
+
+
+/**
+ * Setup a background cover image to display
+ * while loading js libraries!
+ */
+html {
+	display:block;
+	width:100%;
+	height:100%;
+	background: #fff url(loading.jpg) center center no-repeat fixed;
+	background-size: cover;
+}
+
+
+
+/**
+ * Custom List Styles
+ */
+
+.ui-li.readonly {
+	background: #fff;
+}
+
+.ui-li-desc-long {
+	text-overflow: visible;
+	overflow: visible;
+	white-space: normal;
+}
+
+
+

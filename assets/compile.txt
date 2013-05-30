@@ -1,0 +1,7 @@
+---[[   B O I L E R P L A T E   ]]---
+JqueryMobile + BackboneJS + RequireJS
+=====================================
+
+
+from "/assets/":
+node r.js -o js/require.build.js
