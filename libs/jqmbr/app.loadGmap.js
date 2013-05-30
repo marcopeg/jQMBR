@@ -43,7 +43,7 @@ define([
 		// you can setup these options into your App.initialize() method!
 		this.gmapConfig = this.gmapConfig || {};
 		this.gmapConfig = $.extend({}, {
-			key:		'AIzaSyACyT1Lzg258Rc_EEdZWFu010YoLXOG19E',
+			key:		'--YOUR-API--',
 			sensor:		'false',
 			libraries:	'geometry'
 		}, this.gmapConfig);
