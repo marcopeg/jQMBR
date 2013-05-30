@@ -1,4 +1,7 @@
 jQMBR
-=====
+=========
 
-jQueryMobile + BackboneJS + RequireJS | Boilerplate to startup mobile apps!
+> jQueryMobile + BackboneJS + RequireJS | Boilerplate to startup mobile apps!
+
+
+
