@@ -19,10 +19,9 @@ All things are ready to be deployed with *RequireJS's optimizer*
 ## Smooth Startup
 
 Often a *jQM* mobile app **take some time to load** and you may see unformatted page contents  
-before mobile styles are applied.  
-This is a very ugly behavior!
+before mobile styles are applied. This is a very ugly behavior!
 
-jQMBR hide page's body until all scripts are loaded then fade in wile initializing jQM page.
+`jQMBR` hide page's body until all scripts are loaded then fade in wile initializing jQM page.
 
 ## MVC Organization
 
@@ -49,10 +48,10 @@ it as a RequireJS AMD.
 This *controller AMD* can define some **private vars** and listen to  
 every jQueryMobile events to make things work with *Collections* and *Views*.
 
-A *listView* should be delegated to a *Backbone's View* who **update itself  
+**Example:** A *listView* should be delegated to a *Backbone's View* who **update itself  
 according to** a *Collection* data events.
 
-A *header button* should be listened by controller's code to **delegate  
+**Example:** A *header button* should be listened by controller's code to **delegate  
 it's action to** the global application object:
 
     $(document).delegate('#refreshBtn', 'click', function() {
@@ -78,6 +77,28 @@ what might happen if you hook heavy code to them!
 
 `jQMBR`can't predict how good your code will be so **it delay event propagation to  
 the `App object` to reduce hits**. You can set delay time the way you like.
+
+
+### App Modules
+
+`jQMBR` boilerplate comes with some **App Modules** who quick add some feature to your
+application. These modules will gow with time.
+
+You can choose what modules to use by uncommenting relative dependency line in your
+`app.js` source file:
+
+	define([
+	  'jquery',
+	  'jqmbr/AppClass',
+	  
+	  // boilerplate plugins
+	  //'jqmbr/app.bodyFullsize',
+	  //'jqmbr/app.loadGmap'
+
+#### App.loadGmap()
+
+#### App.bodyFullsize()
+
 
 
 
