@@ -18,17 +18,36 @@ define([
 
 ) {
 	
-	var $page = null;
-	var $body = null;
+	// Global controller scoped logic vars, Objects, etc...
+	var _page 	= '#page-index';
 	
-	$(document).delegate('#page-index', 'pagecreate', function() {
+	// Global controller scoped DOM references
+	var $page 	= null;
+	var $body 	= null;
+	
+	
+	/**
+	 * Fetch global DOM reference scoped to this page-controller
+	 * so internal logic can save DOM hits
+	 */
+	$(document).delegate(_page, 'pagecreate', function() {
 		$page = $(this);
+		$body = $page.find('[data-role=content]');
 		console.log('index works');
 	});
 	
-	$(document).delegate('#page-index', 'pageshow', function() {
-		$page.find('[data-role=content]').html('jQM + BackboneJS + RequireJS is running!');
+	$(document).delegate(_page, 'pageshow', function() {});
+	
+	/**
+	 * Unload page DOM items and free private vars 
+	 * to improve global performaces!
+	 */
+	$(document).delegate(_page, 'pagehide', function() {
+		$page.remove();
+		$page = null;
+		$body = null;
 	});
+
 	
 	
 	
