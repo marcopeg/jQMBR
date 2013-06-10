@@ -57,14 +57,6 @@ define([
 			// launch component setup when both image have been loaded and container is ready!
 			$.when(this.imageLoad(), this.options.startupDfd).then($.proxy(this.setup, this));
 			
-			/*
-			$.when(this.imageLoad()).then($.proxy(function() {
-				setTimeout($.proxy(this.setup, this), 500);
-			}, this));
-			*/
-			
-			
-			
 		},
 		
 		
@@ -85,11 +77,10 @@ define([
 			this.enable();
 			
 			// first render and display content image
-			var $img = this.$img;
 			this.render();
-			setTimeout(function() {
-				$img.show();
-			}, this.options.resizeDuration);
+			setTimeout($.proxy(function() {
+				this.$img.show();
+			}, this), this.options.resizeDuration);
 		},
 		
 		

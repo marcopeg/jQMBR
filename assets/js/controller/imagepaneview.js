@@ -61,7 +61,6 @@ define([
 	/**
 	 * Free ImagePaneView instance
 	 */
-	/*
 	$(document).delegate(_page, 'pagebeforehide', function() {
 		_pane.destroy();
 		_pane = null;
@@ -72,7 +71,6 @@ define([
 		$page 	= null;
 		$body 	= null;
 	});
-	*/
 	
 	
 });
