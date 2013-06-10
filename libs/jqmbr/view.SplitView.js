@@ -65,6 +65,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	
 	var SplitView = Backbone.View.extend({
 		
+		ready: $.Deferred(),
+		_rendered: false,
+		
 		initialize: function(options) {
 			options = $.extend({}, {
 				type: 				'horizontal',
@@ -266,6 +269,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.$p1.trigger('splitviewresize');
 			this.$p2.trigger('splitviewresize');
 			this.trigger('splitviewrender');
+			
+			// resolve "ready" deferred at first time rendering
+			if (!this._rendered) {
+				this.ready.resolveWith(this);
+				this._rendered = true;
+			}
 			
 			// propagate rendering to sub SplitView objects
 			_.each(this.propagationChain, function(view) {
