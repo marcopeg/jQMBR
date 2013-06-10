@@ -66,5 +66,21 @@ define([
 		setTimeout(function(){$.mobile.activePage.trigger('click');}, timeout);
 	};
 	
+	
+	
+	/**
+	 * Detect if an object (variable) should be a DeferredObject made by
+	 * $.Deferred()
+	 */
+	AppClass.prototype.isDeferredObject = function(obj) {
+		if (typeof obj.state == 'function') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	
 	return AppClass;
 });
