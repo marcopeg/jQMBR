@@ -359,6 +359,19 @@ define([
 			_img.src = this.$img.attr('src');
 			
 			return dfd.promise();
+		},
+		
+		
+		
+		/**
+		 * Utility to connect an ImagePane to a SplitView panel
+		 */
+		connectToSplitViewPanel: function($panel) {
+			$panel.on('splitviewresize', $.proxy(function() {
+				this.$el.width($panel.width());
+				this.$el.height($panel.height());
+				this.render();
+			}, this));
 		}
 		
 	});

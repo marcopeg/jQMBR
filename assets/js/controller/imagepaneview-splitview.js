@@ -56,15 +56,9 @@ define([
 			mode: 'cover'
 		});
 		
-		_split.on('splitviewrender', function() {
-			_pane1.$el.width(_split.$p1.width());
-			_pane1.$el.height(_split.$p1.height());
-			_pane1.render();
-			_pane2.$el.width(_split.$p2.width());
-			_pane2.$el.height(_split.$p2.height());
-			_pane2.render();
-		});
-				
+		// Connect ImagePane to SplitView
+		_pane1.connectToSplitViewPanel(_split.$p1);
+		_pane2.connectToSplitViewPanel(_split.$p2);				
 		
 	});
 	
