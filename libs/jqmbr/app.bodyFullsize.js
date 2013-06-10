@@ -27,8 +27,19 @@ define([
 	AppClass
 ) {
 	
+	
+	/**
+	 * Setup a global DFD object.
+	 * it's scope is to handle the first body resizing event at page startup.
+	 */
+	AppClass.prototype.initialized.done(function() {
+		this.bodyFullsized = $.Deferred();
+	});
+	
+	
 	AppClass.prototype.bodyFullsize = function() {
 		if (!$.mobile.activePage) return;
+		
 		var $body = $.mobile.activePage.find('[data-role=content]');
 		if ($body.attr('data-fullsize') != 'true') return;
 		
@@ -45,6 +56,7 @@ define([
 		});
 		
 		$body.trigger('fullsize');
+		this.bodyFullsized.resolveWith(this, [$body, height]);
 	}
 	
 	
@@ -52,7 +64,6 @@ define([
 	 * Automagically Setup
 	 */
 	$(document).delegate('[data-role="page"]', 'pageshow', function() {
-		console.log("run");
 		App.bodyFullsize();
 		App.on('resize', App.bodyFullsize, App);
 	});

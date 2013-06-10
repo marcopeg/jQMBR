@@ -17,17 +17,39 @@ define([
 	
 	/**
 	 * Empty class with Backbone's Events System
+	 * it resolve a global "initialized" DeferredObject after
+	 * running "initialize()" method.
+	 *
+	 * initialize() method should return a DFD!!!
 	 */
-	var AppClass = function() {this.initialize.apply(this, arguments);};
+	var AppClass = function() {
+		$.when(this.initialize.apply(this, arguments)).then($.proxy(function() {
+			this.initialized.resolveWith(this);
+		}, this));
+	};
 	_.extend(AppClass.prototype, Backbone.Events);
+	
+	
+	// Initialized DeferredObject
+	AppClass.prototype.initialized 	= $.Deferred();
 	
 	
 	/**
 	 * App Constructor
 	 * !! does not write anything here !!
 	 * !! will be overridden by the initialization file !!
+	 *
+	 * It should return a DeferredObject to be resolved asyncronously so you
+	 * can hold very complex inizialization logic here!
 	 */
-	AppClass.prototype.initialize = function() {};
+	AppClass.prototype.initialize = function() {
+		var dfd = $.Deferred();
+		
+		// ... do stuff or long 
+		dfd.resolve();
+		
+		return dfd.promise();
+	};
 	
 	
 	/**
