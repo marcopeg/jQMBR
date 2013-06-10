@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	
+	<!-- WebApp Properties -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	
+	<!-- Home screen icons -->
+	<link rel="shortcut icon" href="assets/img/icons/icon.png?v002" />
+	<link rel="apple-touch-icon" sizes="57x57" href="assets/img/icons/icon-57.png?v002" />
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/img/icons/icon-72.png?v002" />
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/img/icons/icon@2x.png?v002" />
+	
+	<title>ImagePaneView + SplitView</title>
+	
+	<link rel="stylesheet"  href="assets/css/app.css?v002">
+	
+	<!-- // Choose Developement or Production Entry Point -->
+	<script data-main="assets/js/require.config" src="assets/require-jquery.js?v002"></script>
+	<!--<script data-main="assets/js-deploy/require.config" src="assets/require-jquery.js?v002"></script>-->
+	
+	
+	
+</head>
+<body style="display:none">
+
+	<div data-role="page" id="page-imagepaneview-splitview">
+		<div data-role="header" data-position="fixed" data-theme="b" data-id="app-header">
+			<a href="index.html" data-icon="arrow-l" data-direction="reverse">Back</a>
+			<h1>ImagePaneView + SplitView</h1>
+		</div>
+		<!-- "data-fullsize" automagically expand page's body to fit viewport dimensions! -->
+		<div data-role="content" data-fullsize="true">
+			<div id="left">
+				<div class="ImagePane">
+					<img src="assets/img/simpsons.jpg" alt="simpsons" width="1151" height="602">
+				</div>
+			</div>
+			<div id="right">
+				<div class="ImagePane">
+					<img src="assets/img/simpsons.jpg" alt="simpsons" width="1151" height="602">
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+</body>
+</html>
