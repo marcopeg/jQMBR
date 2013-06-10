@@ -19,7 +19,11 @@ require([
 	'app',
 	
 	// App Controllers
-	'controller/index'
+	'controller/index',
+	'controller/gmap',
+	'controller/splitview',
+	'controller/imagepaneview',
+	'controller/imagepaneview-splitview'
 	
 	// JQM
 	
