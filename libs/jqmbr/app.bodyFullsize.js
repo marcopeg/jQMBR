@@ -57,7 +57,20 @@ define([
 		
 		$body.trigger('fullsize');
 		this.bodyFullsized.resolveWith(this, [$body, height]);
-	}
+	};
+	
+	
+	AppClass.prototype.bodyFullsizeDeferred = function($obj) {
+		var dfd = $.Deferred();
+		
+		if ($obj.length) {
+			$obj.on('fullsize', $.proxy(function() {
+				dfd.resolveWith(this);
+			}, this));
+		}
+		
+		return dfd.promise();
+	};
 	
 	
 	/**
