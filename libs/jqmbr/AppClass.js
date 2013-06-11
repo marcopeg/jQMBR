@@ -78,7 +78,7 @@ define([
 		} else {
 			return false;
 		}
-	}
+	};
 	
 	
 	
