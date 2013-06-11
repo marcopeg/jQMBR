@@ -26,9 +26,10 @@ define([
 	
 ) {
 	
-	var _App			= null;
-	var _gmapIsLoading 	= false;
-	var _gmapIsLoaded	= false;
+	var _App				= null;
+	var _gmapIsLoading 		= false;
+	var _gmapIsLoaded		= false;
+	var _gmapIsLoadedDfd 	= $.Deferred();
 	
 	// handle a queque of callbacks to allo multiple parallel calls to loadGmap()
 	var _queque			= new Array();
@@ -51,13 +52,14 @@ define([
 		// queque requests callback to be runned in right order
 		if (_gmapIsLoading) {
 			_queque.push(callback);
-			return;
+			return _gmapIsLoadedDfd.promise();
 		
 		// set internal flag to teach application a loading is running
 		// other parallel requests are quequed!
 		} else {
 			_gmapIsLoading = true;
-		}
+		};
+		
 		
 		// GMAP ASYNC LOADING
 		if (!_gmapIsLoaded) {
@@ -67,7 +69,7 @@ define([
 			document.body.appendChild(script);
 		} else {
 			window.googleMapaAsyncCallback.call();
-		}
+		};
 		
 		// GMAP ASYNC LOADED CALLBACK
 		window.googleMapaAsyncCallback = function() {
@@ -75,13 +77,18 @@ define([
 			_gmapIsLoaded 	= true;
 			
 			// consume direct callback and callback queque
-			callback.apply();
-			$.each(_queque, function(i,cb) {cb.call()});
+			callback.apply(_App);
+			$.each(_queque, function(i,cb) {cb.call(_App)});
+			
+			// resolve global callback
+			_gmapIsLoadedDfd.resolveWith(_App);
 			
 			// global event
 			_App.trigger('gmapsload');
 		}
 		
-	}
+		return _gmapIsLoadedDfd.promise();
+	};
+	
 	
 });
