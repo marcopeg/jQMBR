@@ -626,7 +626,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		
 		var bounds = new google.maps.LatLngBounds();
 		_.each(pins, function(pin) {
-			bounds.extend(pin.getPosition());
+			if (pin instanceof google.maps.Marker) {
+				bounds.extend(pin.getPosition());
+			} else if (pin instanceof google.maps.LatLng) {
+				bounds.extend(pin);
+			}
 		});
 		
 		this._map.fitBounds(bounds);
