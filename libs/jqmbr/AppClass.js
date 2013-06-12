@@ -81,6 +81,17 @@ define([
 	};
 	
 	
+	/**
+	 * Compile an UnderstandJS template fetching a DOM's note source code.
+	 * - App.DomTemplate('#my-template-source');
+	 * - App.DomTemplate(ViewInstance.$el);
+	 */
+	AppClass.prototype.DomTemplate = function(dom) {
+		var tpl = $('<textarea/>').html($(dom).html()).val();
+		return _.template(tpl);
+	};
+	
+	
 	
 	return AppClass;
 });
