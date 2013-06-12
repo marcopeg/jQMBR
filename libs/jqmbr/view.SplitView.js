@@ -70,15 +70,25 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		
 		initialize: function(options) {
 			options = $.extend({}, {
+				startupDfd:			true,			// delay initialization for a DFD to resolve (es full page load...)
+				updateEvt:			false,			// bind render() to an event triggered on View.el
 				type: 				'horizontal',
 				split:				.5,
 				resizable: 			'auto',
 				p1:					$('<div>'),
 				p2:					$('<div>'),
-				updateEvt:			false,
 				propagationChain:	[]
 			}, (options || {}));
 			
+			// delayed initialization
+			$.when(options.startupDfd).then(_.bind(function() {
+				this._initialize(options);
+			}, this));
+			
+		},
+		
+		// go on with initialization after delay
+		_initialize: function(options) {
 			
 			this.type 				= options.type;
 			this.split 				= options.split;
@@ -234,14 +244,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			 */
 			if (options.updateEvt) {
 				this.$el.on(options.updateEvt, $.proxy(this.render, this));
-			} else {
-				this.render();
 			}
 			
+			this.render();
+			
 		},
-		
-		
-		
 		
 		
 		
@@ -251,11 +258,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		 */
 		render: function() {
 			clearTimeout(this._delayedRender);
-			this._delayedRender = setTimeout($.proxy(this.renderer, this), 10);
+			this._delayedRender = setTimeout($.proxy(this._render, this), 10);
 			return this.$el;
 		},
 		
-		renderer: function() {
+		_render: function() {
 			switch (this.type) {
 				case 'horizontal':
 					this.renderH();
