@@ -23,7 +23,11 @@ require([
 	'controller/gmap',
 	'controller/splitview',
 	'controller/imagepaneview',
-	'controller/imagepaneview-splitview'
+	'controller/imagepaneview-splitview',
+	
+	'controller/splitview-chain-a',
+	'controller/splitview-chain-b',
+	'controller/splitview-chain-c',
 	
 	// JQM
 	

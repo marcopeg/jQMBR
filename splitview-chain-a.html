@@ -13,7 +13,7 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="assets/img/icons/icon-72.png?v002" />
 	<link rel="apple-touch-icon" sizes="114x114" href="assets/img/icons/icon@2x.png?v002" />
 	
-	<title>jQM + BackboneJS + RequireJS Boilerplate</title>
+	<title>Chained SplitView</title>
 	
 	<link rel="stylesheet"  href="assets/css/app.css?v002">
 	
@@ -22,41 +22,23 @@
 	<!--<script data-main="assets/js-deploy/require.config" src="assets/require-jquery.js?v002"></script>-->
 	
 	
+	
 </head>
 <body style="display:none">
 
-	<div data-role="page" id="page-index">
+	<div data-role="page" id="page-splitview-chain-a">
 		<div data-role="header" data-position="fixed" data-theme="b" data-id="app-header">
-			<h1>jQM + BackboneJS + RequireJS Boilerplate</h1>
+			<a href="index.html" data-icon="home" data-direction="reverse">Exit</a>
+			<h1>Chained SplitView - A</h1>
 		</div>
-		<div data-role="content">
-			<p>
-				<b>jQMBR</b> offers you a great boilerplate to <b>quick startup your
-				Mobile App</b>!
-			</p>
-			<ul data-role="listview" data-inset="true">
-				<li data-role="list-divider">General</li>
-				<li>
-					<a href="gmap.html">Google Map API</a>
-				</li>
-				
-				<li data-role="list-divider">BackboneJS's Views</li>
-				<li>
-					<a href="splitview.html">SplitView</a>
-				</li>
-				<li>
-					<a href="imagepaneview.html">ImagePane</a>
-				</li>
-				<li>
-					<a href="imagepaneview_splitview.html">ImagePane + SplitView</a>
-				</li>
-				
-				<li data-role="list-divider">Test Cases</li>
-				<li>
-					<a href="splitview-chain-a.html">Chained SplitViews</a>
-				</li>
-				
-			</ul>
+		<div data-role="content" data-fullsize="true"></div>
+		<div data-role="footer" data-position="fixed" data-id="app-splitview-chained-footer">
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+					<li><a href="splitview-chain-c.html" data-icon="arrow-l" data-theme="b" data-direction="reverse">Previous</a></li>
+					<li><a href="splitview-chain-b.html" data-icon="arrow-r" data-theme="b">Next</a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	
