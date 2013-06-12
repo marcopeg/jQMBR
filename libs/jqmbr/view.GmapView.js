@@ -28,9 +28,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		
 		initialize: function(options) {
 			
-			this.ready = $.Deferred();
-			
 			this._defaults(options);
+			
+			this.ready = $.Deferred();
+			this.ready.done(_.bind(this.onReady, this));
 			
 			// bind render() to events and trigger first rendering.
 			// (an external callback should influence or prevent that logic!)
@@ -146,6 +147,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		 * UI Events Callbacks
 		 * @TODO: should events be temporary shutten down?
 		 */
+		onReady: function() {console.log("MAP READY");},
 		onCenterChange: function() {},
 		onZoomChange: function() {},
 		onClick: function() {},
@@ -179,6 +181,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		// "t:3" and following deletion operation is a developing facility!
 		t:3},options);
 		delete(this.options.t);
+		
+		// Overrides local callbacks with configuration's versions
+		if (typeof this.options.onReady == 'function') 				this.onReady 					= this.options.onReady;
+		if (typeof this.options.onCenterChange == 'function') 		this.onCenterChange 			= this.options.onCenterChange;
+		if (typeof this.options.onZoomChange == 'function') 		this.onZoomChange 				= this.options.onZoomChange;
+		if (typeof this.options.onClick == 'function') 				this.onClick 					= this.options.onClick;
+		if (typeof this.options.onClick == 'function') 				this.onClick 					= this.options.onClick;
+		if (typeof this.options.beforeInitializeMap == 'function') 	this.beforeInitializeMap 		= this.options.beforeInitializeMap;
+		if (typeof this.options.afterInitialize == 'function') 		this.afterInitialize 			= this.options.afterInitialize;
 		
 		return this.options;
 	};
@@ -512,7 +523,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		// - {}: full config object
 		// - [lat, lng]: a "getLatLng()" compatibile source (string, array, LatLng)
 		// - [lat, lng], {}: a mix of above
-		if ((_.isObject(cfg) && cfg instanceof google.maps.LatLng) || _.isArray(cfg) || _.isString(cfg)) {
+		// - {lat:45.123, lng:45.123}, {other configs}
+		if ((_.isObject(cfg) && cfg instanceof google.maps.LatLng) || (_.isObject(cfg) && cfg.lat && cfg.lng) || _.isArray(cfg) || _.isString(cfg)) {
 			cfg = {
 				position: cfg
 			};
