@@ -28,13 +28,11 @@ define([
 ) {
 	
 	
-	/**
-	 * Setup a global DFD object.
-	 * it's scope is to handle the first body resizing event at page startup.
-	 */
-	AppClass.prototype.initialized.done(function() {
-		this.bodyFullsized = $.Deferred();
-	});
+	var __bodyFullsizeDfd = function($obj) {
+		var dfd = $obj.data('bodyFullsizeDfd') || $.Deferred();
+		$obj.data('bodyFullsizeDfd', dfd);
+		return dfd;
+	}
 	
 	
 	AppClass.prototype.bodyFullsize = function() {
@@ -42,6 +40,9 @@ define([
 		
 		var $body = $.mobile.activePage.find('[data-role=content]');
 		if ($body.attr('data-fullsize') != 'true') return;
+		
+		// setup new DFD for given DOM item
+		var dfd = __bodyFullsizeDfd($body);
 		
 		var $header = $.mobile.activePage.find('[data-role=header]');
 		var $footer = $.mobile.activePage.find('[data-role=footer]');
@@ -56,20 +57,14 @@ define([
 		});
 		
 		$body.trigger('fullsize');
-		this.bodyFullsized.resolveWith(this, [$body, height]);
+		dfd.resolveWith(this, [$body, height]);
+		
+		return dfd.promise();
 	};
 	
 	
-	AppClass.prototype.bodyFullsizeDeferred = function($obj) {
-		var dfd = $.Deferred();
-		
-		if ($obj.length) {
-			$obj.on('fullsize', $.proxy(function() {
-				dfd.resolveWith(this);
-			}, this));
-		}
-		
-		return dfd.promise();
+	AppClass.prototype.bodyFullsized = function($obj) {
+		return __bodyFullsizeDfd($obj).promise();
 	};
 	
 	
