@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	
+	<!-- WebApp Properties -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	
+	<!-- Home screen icons -->
+	<link rel="shortcut icon" href="assets/img/icons/icon.png?v002" />
+	<link rel="apple-touch-icon" sizes="57x57" href="assets/img/icons/icon-57.png?v002" />
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/img/icons/icon-72.png?v002" />
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/img/icons/icon@2x.png?v002" />
+	
+	<title>Chained SplitView</title>
+	
+	<link rel="stylesheet"  href="assets/css/app.css?v002">
+	
+	<!-- // Choose Developement or Production Entry Point -->
+	<script data-main="assets/js/require.config" src="assets/require-jquery.js?v002"></script>
+	<!--<script data-main="assets/js-deploy/require.config" src="assets/require-jquery.js?v002"></script>-->
+	
+	
+	
+</head>
+<body style="display:none">
+
+	<div data-role="page" id="page-splitview-chain-e">
+		<div data-role="header" data-position="fixed" data-theme="b" data-id="app-header">
+			<a href="index.html" data-icon="home" data-direction="reverse">Exit</a>
+			<h1>Chained SplitView - D</h1>
+		</div>
+		<div data-role="content" data-fullsize="true">
+			
+			<div data-app-role="listview">
+				<div style="margin:15px;">
+					<ul data-role="listview" data-inset="true">
+						<li><a href="#">Item 01</a></li>
+						<li><a href="#">Item 02</a></li>
+						<li><a href="#">Item 03</a></li>
+						<li><a href="#">Item 04</a></li>
+						<li><a href="#">Item 05</a></li>
+						<li><a href="#">Item 06</a></li>
+						<li><a href="#">Item 07</a></li>
+						<li><a href="#">Item 08</a></li>
+						<li><a href="#">Item 09</a></li>
+						<li><a href="#">Item 10</a></li>
+						<li><a href="#">Item 11</a></li>
+						<li><a href="#">Item 12</a></li>
+						<li><a href="#">Item 13</a></li>
+						<li><a href="#">Item 14</a></li>
+						<li><a href="#">Item 15</a></li>
+						<li><a href="#">Item 16</a></li>
+						<li><a href="#">Item 17</a></li>
+						<li><a href="#">Item 18</a></li>
+						<li><a href="#">Item 19</a></li>
+						<li><a href="#">Item 20</a></li>
+					</ul>
+				</div>
+			</div>
+			
+			<div data-app-role="formview">
+				<div style="margin:15px">
+					<form action="#">
+						<p>
+							<label for="page-splitview-chain-e-fld1">Field 01</label>
+							<input type="text" id="page-splitview-chain-e-fld1" name="page-splitview-chain-e-fld1" />
+						</p>
+						<p>
+							<label for="page-splitview-chain-e-fld2">Field 02</label>
+							<select id="page-splitview-chain-e-fld2" name="page-splitview-chain-e-fld2">
+								<option>Option 01</option>
+								<option>Option 02</option>
+								<option>Option 03</option>
+								<option>Option 04</option>
+								<option>Option 05</option>
+							</select>
+						</p>
+						<p>
+							<label for="page-splitview-chain-e-fld3">Field 01</label>
+							<textarea id="page-splitview-chain-e-fld3" name="page-splitview-chain-e-fld3" /></textarea>
+						</p>
+					</form>
+				</div>
+			</div>
+		
+		</div>
+		<div data-role="footer" data-position="fixed" data-id="app-splitview-chained-footer">
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+					<li><a href="splitview-chain-d.html" data-icon="arrow-l" data-theme="b" data-direction="reverse">Previous</a></li>
+					<li><a href="splitview-chain-a.html" data-icon="arrow-r" data-theme="b">Next</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

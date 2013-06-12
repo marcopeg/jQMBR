@@ -28,6 +28,8 @@ require([
 	'controller/splitview-chain-a',
 	'controller/splitview-chain-b',
 	'controller/splitview-chain-c',
+	'controller/splitview-chain-d',
+	'controller/splitview-chain-e',
 	
 	// JQM
 	
