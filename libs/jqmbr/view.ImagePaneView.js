@@ -363,6 +363,13 @@ define([
 			if (Iy1 <Py1) {
 				_pos.top = 0-(this.$img.height()-this.$wrapper.height());
 			}
+			
+			if (_pos.top != undefined && this.$img.height() < this.$wrapper.height()) {
+				_pos.top = (this.$wrapper.height()-this.$img.height())/2;
+			}
+			if (_pos.left != undefined && this.$img.width() < this.$wrapper.width()) {
+				_pos.left = (this.$wrapper.width()-this.$img.width())/2;
+			}
 			return _pos;
 		},
 		
