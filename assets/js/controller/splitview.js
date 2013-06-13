@@ -37,12 +37,11 @@ define([
 		$page = $(this);
 		$body = $page.find('[data-role=content]');
 		
-	});
-	
-	$(document).delegate(_page, 'pageshow', function() {
+		
 		_split = new SplitView({
 			el: 		$body,
 			type: 		'vertical',
+			startupDfd:	App.bodyFullsized($body),
 			updateEvt: 	'fullsize', // update on viewport resize
 			split: 		'50px',
 			p1: 		'#panel-top',
@@ -72,7 +71,12 @@ define([
 					p2:	$('#panel-bottom-right-bottom')
 				}
 			}
-		}).render();
+		});
+		
+	});
+	
+	$(document).delegate(_page, 'pageshow', function() {
+		
 	});
 	
 	

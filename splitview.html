@@ -33,33 +33,37 @@
 		</div>
 		<!-- "data-fullsize" automagically expand page's body to fit viewport dimensions! -->
 		<div data-role="content" data-fullsize="true">
+			
+			
 			<div id="panel-top" class="panel">
-				<div class="inner">
-					<h4>Top Panel</h4>
-					<p>height 50px of viewport, non resizable</p>
-				</div>
+				<h4>Top Panel</h4>
+				<p>height 50px of viewport, non resizable</p>
 			</div>
 			<div id="panel-bottom-left" class="panel">
-				<div class="inner">
-					<h4>bottom left panel</h4>
-					<p>width 30%, resizable
-				</div>
+				<h4>bottom left panel</h4>
+				<p>width 30%, resizable</p>
 			</div>
-			<div id="panel-bottom-right-bottom" class="panel">
-				<div class="inner" style="margin-top:20px">
-					<h4>bottom right bottom panel</h4>
-					<p>
-						100px resizable height
-					</p>
-				</div>
+			<div id="panel-bottom-right-bottom" class="panel" style="margin-bottom:20px;font-size:.8em;" data-iscroll="true">
+				<h4>Cos'è Lorem Ipsum</h4>
+				<p style="margin-bottom:10px">
+					Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa.
+				</p>
+				<p style="margin-bottom:10px">
+					Lorem Ipsum è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione.
+				</p>
+				<p style="margin-bottom:10px">
+					È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci sostanzialmente inalterato.
+				</p>
+				<p>
+					Fu reso popolare, negli anni ’60, con la diffusione dei fogli di caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.
+				</p>
 			</div>
 		</div>
 		
 		<style>
 		/* custom styles for this page */
-		#page-splitview .panel {overflow:hidden}
-		#page-splitview .inner {padding:10px;font-size:.85em;}
-		#page-splitview .inner h4, .inner p {margin: 0 0 3px 0;}
+		#page-splitview .panel {overflow:hidden;padding:10px;font-size:.85em;}
+		#page-splitview h4, p {margin: 0 0 3px 0;}
 		</style>
 	</div>
 	

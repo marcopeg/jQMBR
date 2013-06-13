@@ -32,6 +32,7 @@ require([
 	'controller/splitview-chain-e',
 	
 	// JQM
+	'lib/iscroll/iscroll'
 	
 
 
