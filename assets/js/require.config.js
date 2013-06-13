@@ -10,6 +10,7 @@ requirejs.config({
 	baseUrl: 'assets/js/',
 	urlArgs: "devTime=" + (new Date()).getTime(),
 	paths: {
+		lib:		'../../libs',
 		jqueryui:	'../../libs/jqueryui/jquery-ui-1.9.2.custom.min',
 		jqueryuit:	'../../libs/jqueryui/jquery.ui.touch-punch',
 		plugins:	'../../libs/jquery-plugins',
