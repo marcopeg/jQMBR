@@ -37,13 +37,15 @@ define([
 		$body = $page.find('[data-role=content]');
 		
 		_pane = new ImagePaneView({
-			el: 		$body,
+			el: 		$body.find('img:first'),
 			
 			// wait for bodyFullsize to happen
-			startupDfd:	App.bodyFullsized,
+			startupDfd:	App.bodyFullsized($body),
 			
 			// bind render() to bodyFullsize 
-			updateEvt: 	'fullsize'
+			updateEvt: 	'fullsize',
+			
+			mode: 'zoom'
 		});
 		
 		

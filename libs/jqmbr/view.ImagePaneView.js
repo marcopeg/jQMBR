@@ -36,11 +36,27 @@ define([
 			}, (options || {}));
 			
 			
-			// reference to existing image or create new DOM element
-			this.$img = this.$el.find('img');
-			if (!this.$img) {
-				this.$img = $('<img>').attr('src', options.src);
+			/**
+			 * Build reference to the image and it's container
+			 */
+			if (this.$el[0].tagName.toUpperCase() == 'IMG') {
+				this.$img = this.$el;
+				this.$container = this.$el.parent();
+			} else {
+				this.$img = this.$el.find('img');
+				this.$container = this.$el;
+				if (!this.$img) {
+					this.$img = $('<img>').attr('src', options.src);
+					this.$img.appendTo(this.$el);
+				}
 			}
+			
+			/**
+			 * Wrap Image
+			 * need an always relative container to pan image!
+			 */
+			this.$wrapper = $('<div>').addClass('uxImagePaneView').append(this.$img);
+			this.$container.append(this.$wrapper);
 			
 			// image empty properties
 			this.imageReady = false;
@@ -50,9 +66,6 @@ define([
 			this.h = 0;		// image original height
 			this.r = 0;		// image ratio
 			
-			
-			// setup custom classes to the view container
-			this.$el.addClass('uxImagePaneView');
 			
 			// launch component setup when both image have been loaded and container is ready!
 			$.when(this.imageLoad(), this.options.startupDfd).then($.proxy(this.setup, this));
@@ -64,6 +77,7 @@ define([
 		 * Setup original image details and build user interactions
 		 */
 		setup: function() {
+			
 			//console.log("setup");
 			this.imageReady = true;
 			this.w = this.$img.width();
@@ -78,6 +92,7 @@ define([
 			
 			// first render and display content image
 			this.render();
+			
 			setTimeout($.proxy(function() {
 				this.$img.show();
 			}, this), this.options.resizeDuration);
@@ -111,7 +126,7 @@ define([
 				}, this));
 			}
 			if (this.options.updateEvt) {
-				this.$el.on(this.options.updateEvt, $.proxy(function(e) {
+				this.$container.on(this.options.updateEvt, $.proxy(function(e) {
 					e.preventDefault();
 					this.render();
 				}, this));
@@ -164,6 +179,7 @@ define([
 		_rendering: false,
 		_render: function() {
 			
+			this._fitWrapper();
 			if (!this.imageReady) return $.Deferred();
 			
 			switch (this.options.mode) {
@@ -194,13 +210,13 @@ define([
 			var _l = 0;
 			
 			if (this.canvasRatio() > this.r) {
-				_h = this.$el.height();
+				_h = this.$wrapper.height();
 				_w = _h * this.r;
-				_l = (this.$el.width() - _w) / 2;
+				_l = (this.$wrapper.width() - _w) / 2;
 			} else {
-				_w = this.$el.width();
+				_w = this.$wrapper.width();
 				_h = _w / this.r;
-				_t = (this.$el.height() - _h) / 2;
+				_t = (this.$wrapper.height() - _h) / 2;
 			}
 			
 			this.$img.stop().animate({
@@ -236,13 +252,13 @@ define([
 			var _l = 0;
 			
 			if (this.canvasRatio() > this.r) {
-				_w = this.$el.width();
+				_w = this.$wrapper.width();
 				_h = _w / this.r;
-				_t = 0 - (_h - this.$el.height()) / 2;
+				_t = 0 - (_h - this.$wrapper.height()) / 2;
 			} else {
-				_h = this.$el.height();
+				_h = this.$wrapper.height();
 				_w = _h * this.r;
-				_l = 0 - (_w - this.$el.width()) / 2;
+				_l = 0 - (_w - this.$wrapper.width()) / 2;
 			}
 			
 			this.$img.stop().animate({
@@ -272,16 +288,16 @@ define([
 			var _t = 0;
 			var _l = 0;
 			
-			if (_w > this.$el.width()) {
-				_l = 0 - (_w - this.$el.width()) / 2;
+			if (_w > this.$wrapper.width()) {
+				_l = 0 - (_w - this.$wrapper.width()) / 2;
 			} else {
-				_l = (this.$el.width() - _w) / 2;
+				_l = (this.$wrapper.width() - _w) / 2;
 			}
 			
 			if (_h > this.$el.height()) {
-				_t = 0 - (_h - this.$el.height()) / 2;
+				_t = 0 - (_h - this.$wrapper.height()) / 2;
 			} else {
-				_t = (this.$el.height() - _h) / 2;
+				_t = (this.$wrapper.height() - _h) / 2;
 			}
 			
 			this.$img.stop().animate({
@@ -299,6 +315,17 @@ define([
 			return dfd.promise();
 		},
 		
+		
+		
+		/**
+		 * Adapt image wrapper to fit container size
+		 */
+		_fitWrapper: function() {
+			this.$wrapper.css({
+				width: 	this.$container.width(),
+				height: this.$container.height()
+			});
+		},
 		
 		
 		onDragStart: function() {
@@ -390,7 +417,7 @@ define([
 	var _style = ''
 		+ '<style type="text/css">'
 		
-		+ '.uxImagePaneView {overflow:hidden;position:relative}'
+		+ '.uxImagePaneView {display:block;overflow:hidden;position:relative}'
 		+ '.uxImagePaneView img {display:none;position:absolute;top:0;left:0}'
 				
 		+ '</style>';

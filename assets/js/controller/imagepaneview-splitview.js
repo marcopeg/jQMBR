@@ -42,23 +42,29 @@ define([
 		
 		_split = new SplitView({
 			el: $body,
+			startupDfd:	App.bodyFullsized($body),
 			updateEvt: 	'fullsize',
 			p1: '#left',
 			p2: '#right'
 		});
 		
-		_pane1 = new ImagePaneView({
-			el: _split.$p1.find('.ImagePane')
+		$.when(_split.ready).then(function() {
+			
+			_pane1 = new ImagePaneView({
+				el: _split.$w1
+			});
+			
+			_pane2 = new ImagePaneView({
+				el: _split.$w2,
+				mode: 'cover'
+			});
+			
+			// Connect ImagePane to SplitView
+			_pane1.connectToSplitViewPanel(_split.$w1);
+			_pane2.connectToSplitViewPanel(_split.$w2);
+			
 		});
 		
-		_pane2 = new ImagePaneView({
-			el: _split.$p2.find('.ImagePane'),
-			mode: 'cover'
-		});
-		
-		// Connect ImagePane to SplitView
-		_pane1.connectToSplitViewPanel(_split.$p1);
-		_pane2.connectToSplitViewPanel(_split.$p2);				
 		
 	});
 	
