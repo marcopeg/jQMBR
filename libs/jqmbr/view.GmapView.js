@@ -147,7 +147,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		 * UI Events Callbacks
 		 * @TODO: should events be temporary shutten down?
 		 */
-		onReady: function() {console.log("MAP READY");},
+		onReady: function() {},
 		onCenterChange: function() {},
 		onZoomChange: function() {},
 		onClick: function() {},
