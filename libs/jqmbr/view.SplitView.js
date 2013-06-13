@@ -63,13 +63,26 @@
  */
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	
+	
+	if (!window.__jQMBR__SplitViewIdsCollections) {
+		window.__jQMBR__SplitViewIdsCollections = [];
+	}
+	
+	var __getNewId = function() {
+		var id = 'SplitView' + window.__jQMBR__SplitViewIdsCollections.length + 1;
+		window.__jQMBR__SplitViewIdsCollections.push(id);
+		return id;
+	};
+	
 	var SplitView = Backbone.View.extend({
 		
 		ready: $.Deferred(),
 		_rendered: false,
 		
 		initialize: function(options) {
-			options = $.extend({}, {
+			
+			this.options = $.extend({}, {
+				id:					__getNewId(),
 				startupDfd:			true,			// delay initialization for a DFD to resolve (es full page load...)
 				updateEvt:			false,			// bind render() to an event triggered on View.el
 				type: 				'horizontal',
@@ -77,22 +90,25 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				resizable: 			'auto',
 				p1:					$('<div>'),
 				p2:					$('<div>'),
-				propagationChain:	[]
+				propagationChain:	[],
+				
+				// prevent fixed header and footer to go away when clicking on the body
+				stopClickPropagation:true
 			}, (options || {}));
 			
 			// delayed initialization
 			$.when(options.startupDfd).then(_.bind(function() {
-				this._initialize(options);
+				this._initialize();
 			}, this));
 			
 		},
 		
 		// go on with initialization after delay
-		_initialize: function(options) {
+		_initialize: function() {
 			
-			this.type 				= options.type;
-			this.split 				= options.split;
-			this.propagationChain 	= options.propagationChain;
+			this.type 				= this.options.type;
+			this.split 				= this.options.split;
+			this.propagationChain 	= this.options.propagationChain;
 			
 			
 			
@@ -100,86 +116,99 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			/**
 			 * Apply an internal wrapper
 			 */
-			this.$wrap = $('<div>').appendTo(this.$el);
+			this.$wrap = $('<div>').attr('id', this.options.id).appendTo(this.$el);
+			
+			
+			/**
+			 * Prevent click propagation option
+			 * when you click into the body fixed headers may disappear and this may be a very
+			 * owful behavior!
+			 */
+			if (this.options.stopClickPropagation) {
+				this.$wrap.on('click', function(e) {
+					e.stopPropagation();
+				});
+			}
 			
 			/**
 			 * Identify sub panels DOM items from jQuery objects or Backbone.View instances
 			 */
-			if (options.p1 instanceof $) {
-				this.$p1 = options.p1;
-			} else if (options.p1 instanceof Backbone.View) {
-				this.$p1 = options.p1.$el;
-				this.chainTo(options.p1);
-			} else if (typeof options.p1 == 'object') {
-				options.p1 = new SplitView(options.p1);
-				this.$p1 = options.p1.$el;
-				this.chainTo(options.p1);
+			if (this.options.p1 instanceof $) {
+				this.$p1 = this.options.p1;
+			} else if (this.options.p1 instanceof Backbone.View) {
+				this.$p1 = this.options.p1.$el;
+				this.chainTo(this.options.p1);
+			} else if (typeof this.options.p1 == 'object') {
+				this.options.p1 = new SplitView(this.options.p1);
+				this.$p1 = this.options.p1.$el;
+				this.chainTo(this.options.p1);
 			} else {
-				var _test = $(options.p1);
+				var _test = $(this.options.p1);
 				if (_test.length) {
 					this.$p1 = _test;
 					delete(_test);
 				} else {
-					this.$p1 = $('<div>').html(options.p1);
+					this.$p1 = $('<div>').html(this.options.p1);
 				}
 			}
 			
-			if (options.p2 instanceof $) {
-				this.$p2 = options.p2;
-			} else if (options.p2 instanceof Backbone.View) {
-				this.$p2 = options.p2.$el;
-				this.chainTo(options.p2);
-			} else if (typeof options.p2 == 'object') {
-				options.p2 = new SplitView(options.p2);
-				this.$p2 = options.p2.$el;
-				this.chainTo(options.p2);
+			if (this.options.p2 instanceof $) {
+				this.$p2 = this.options.p2;
+			} else if (this.options.p2 instanceof Backbone.View) {
+				this.$p2 = this.options.p2.$el;
+				this.chainTo(this.options.p2);
+			} else if (typeof this.options.p2 == 'object') {
+				this.options.p2 = new SplitView(this.options.p2);
+				this.$p2 = this.options.p2.$el;
+				this.chainTo(this.options.p2);
 			} else {
-				var _test = $(options.p2);
+				var _test = $(this.options.p2);
 				if (_test.length) {
 					this.$p2 = _test;
 					delete(_test);
 				} else {
-					this.$p2 = $('<div>').html(options.p2);
+					this.$p2 = $('<div>').html(this.options.p2);
 				}
 			}
 			
+			/**
+			 * Apply wrappers to each panel
+			 */
+			this.$w1 = $('<div>').attr('id', this.options.id+'W1').append(this.$p1);
+			this.$w2 = $('<div>').attr('id', this.options.id+'W2').append(this.$p2);
+			
 			
 			/**
-			 * Check if sub panels are attached to the view's DOM or attach them
+			 * Move panel's wrappers inside SplitView wrapper
 			 */
-			if (this.$p1.parent() != this.$el) {
-				this.$el.append(this.$p1);
-			}
-			
-			if (this.$p2.parent() != this.$el) {
-				this.$el.append(this.$p2);
-			}
-			
-			/**
-			 * Move panels inside SplitView wrapper
-			 */
-			this.$wrap.append(this.$p1);
-			this.$wrap.append(this.$p2);
+			this.$wrap.append(this.$w1);
+			this.$wrap.append(this.$w2);
 			
 			
 			/**
 			 * Assign custom Classes
 			 */
 			this.$el.addClass('uxSplitView');
-			this.$p1.addClass('uxSplitViewPanel');
-			this.$p2.addClass('uxSplitViewPanel');
+			this.$w1.addClass('uxSplitViewPanel');
+			this.$w2.addClass('uxSplitViewPanel');
+			this.$p1.addClass('uxSplitViewInnerPanel');
+			this.$p2.addClass('uxSplitViewInnerPanel');
 			this.$wrap.addClass('uxSplitViewWrap');
 			switch (this.type) {
 				case 'horizontal':
 					this.$el.addClass('uxSplitViewH');
-					this.$p1.addClass('uxSplitViewLPanel');
-					this.$p2.addClass('uxSplitViewRPanel');
+					this.$w1.addClass('uxSplitViewLPanel');
+					this.$w2.addClass('uxSplitViewRPanel');
+					this.$p1.addClass('uxSplitViewLInnerPanel');
+					this.$p2.addClass('uxSplitViewRInnerPanel');
 					this.$wrap.addClass('uxSplitViewWrapH');
 					break;
 				case 'vertical':
 					this.$el.addClass('uxSplitViewV');
-					this.$p1.addClass('uxSplitViewTPanel');
-					this.$p2.addClass('uxSplitViewBPanel');
+					this.$w1.addClass('uxSplitViewTPanel');
+					this.$w2.addClass('uxSplitViewBPanel');
+					this.$p1.addClass('uxSplitViewTInnerPanel');
+					this.$p2.addClass('uxSplitViewBInnerPanel');
 					this.$wrap.addClass('uxSplitViewWrapV');
 					break;
 			}
@@ -197,20 +226,20 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				if (this.split.substr(0, 1) == '-') {
 					switch (this.type) {
 						case 'horizontal':
-							this.$p2.css('width', Math.abs(parseInt(this.split)));
+							this.$w2.css('width', Math.abs(parseInt(this.split)));
 							break;
 						case 'vertical':
-							this.$p2.css('height', Math.abs(parseInt(this.split)));
+							this.$w2.css('height', Math.abs(parseInt(this.split)));
 							break;
 					}
 					this.split = 1;
 				} else {
 					switch (this.type) {
 						case 'horizontal':
-							this.$p1.css('width', this.split);
+							this.$w1.css('width', this.split);
 							break;
 						case 'vertical':
-							this.$p1.css('height', this.split);
+							this.$w1.css('height', this.split);
 							break;
 					}
 					this.split = 0;
@@ -226,8 +255,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			 * 0 = first panel (left/top)
 			 * 1 = last panel (right/bottom)
 			 */
-			if ((this.split === 1 || this.split === 0) && options.resizable == 'auto') {
-				options.resizable = false;
+			if ((this.split === 1 || this.split === 0) && this.options.resizable == 'auto') {
+				this.options.resizable = false;
 			}
 			
 			
@@ -235,15 +264,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			/**
 			 * Initialize Resizable Behavior
 			 */
-			if (options.resizable != false) {
+			if (this.options.resizable != false) {
 				this.initializeResizable();
 			}
 			
 			/**
 			 * Bind to self-render event
 			 */
-			if (options.updateEvt) {
-				this.$el.on(options.updateEvt, $.proxy(this.render, this));
+			if (this.options.updateEvt) {
+				this.$el.on(this.options.updateEvt, $.proxy(this.render, this));
 			}
 			
 			this.render();
@@ -277,6 +306,37 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.$p2.trigger('splitviewresize');
 			this.trigger('splitviewrender');
 			
+			
+			
+			
+			/**
+			 * iScroll Integration
+			 * need iScroll plugin to be loaded
+			 * need data-iscroll="true" attribute on panel object
+			 */
+			if (window.iScroll) {
+				if (this.$p1.attr('data-iscroll') == "true") {
+					var iS1 = this.$w1.data('iScroll');
+					if (!iS1) {
+						iS1 = new iScroll(this.$w1.attr('id'));
+						this.$w1.data('iScroll', iS1);
+					} else {
+						iS1.refresh();
+					}
+				}
+				if (this.$p2.attr('data-iscroll') == "true") {
+					var iS2 = this.$w2.data('iScroll');
+					if (!iS2) {
+						iS2 = new iScroll(this.$w2.attr('id'));
+						this.$w2.data('iScroll', iS2);
+					} else {
+						iS2.refresh();
+					}
+				}
+			}
+			
+			
+			
 			// resolve "ready" deferred at first time rendering
 			if (!this._rendered) {
 				this.ready.resolveWith(this);
@@ -296,15 +356,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			// left panel fixed width
 			if (this.split === 0) {
 				var _w1 = this.$p1.outerWidth();
-				this.$p2.css({
+				this.$w2.css({
 					width:	_wV - _w1,
 					height:	_hV
 				});
 			
 			// right panel fixed width
 			} else if (this.split === 1) {
-				var _w1 = this.$p2.outerWidth();
-				this.$p1.css({
+				var _w1 = this.$w2.outerWidth();
+				this.$w1.css({
 					width:	_wV - _w1,
 					height:	_hV
 				});
@@ -313,11 +373,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			} else {
 				var _w1 = Math.floor(_wV * this.split);
 				var _w2 = _wV - _w1;
-				this.$p1.css({
+				this.$w1.css({
 					width:	_w1,
 					height:	_hV
 				});
-				this.$p2.css({
+				this.$w2.css({
 					width:	_wV - _w1,
 					height:	_hV
 				});
@@ -339,16 +399,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			
 			// top panel fixed width
 			if (this.split === 0) {
-				var _h1 = this.$p1.outerHeight();
-				this.$p2.css({
+				var _h1 = this.$w1.outerHeight();
+				this.$w2.css({
 					width:	_wV,
 					height:	_hV - _h1
 				});
 			
 			// bottom panel fixed width
 			} else if (this.split === 1) {
-				var _h1 = this.$p2.outerHeight();
-				this.$p1.css({
+				var _h1 = this.$w2.outerHeight();
+				this.$w1.css({
 					width:	_wV,
 					height:	_hV - _h1
 				});
@@ -357,11 +417,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			} else {
 				var _h1 = Math.floor(_hV * this.split);
 				var _h2 = _hV - _h1;
-				this.$p1.css({
+				this.$w1.css({
 					width:	_wV,
 					height:	_h1
 				});
-				this.$p2.css({
+				this.$w2.css({
 					width:	_wV,
 					height:	_hV - _h1
 				});
@@ -371,7 +431,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			if (this.$resizer) {
 				var _r12 = this.$resizer.width()/2;
 				this.$resizer.css({
-					top: 	this.$p1.outerHeight() - _r12,
+					top: 	this.$w1.outerHeight() - _r12,
 					left: 	this.$wrap.width() / 2 - _r12
 				});
 			}
@@ -465,6 +525,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		+ '.uxSplitViewWrapV {}'
 		
 		+ '.uxSplitViewPanel {position:absolute;top:0;left:0;display:block;overflow:auto;margin:0 !important;padding:0 !important}'
+		+ '.uxSplitViewInnerPanel {overflow:hidden}'
 		
 		+ '.uxSplitViewWrapH>.uxSplitViewPanel {height:100%}'
 		+ '.uxSplitViewLPanel {border-right:1px solid #fff}'
