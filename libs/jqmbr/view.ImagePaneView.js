@@ -328,16 +328,42 @@ define([
 		},
 		
 		
-		onDragStart: function() {
-			//console.log('dragstart');
+		onDragStart: function() {},
+		
+		onDragStop: function(e, ui) {
+			var _pos = this._draggingConstrainer();
+			if (!_.isEmpty(_pos)) {
+				this.$img.stop().animate(_pos, 350, 'expoout');
+			}
 		},
 		
-		onDragStop: function() {
-			//console.log('dragend');
-		},
+		onDragging: function(e, ui) {},
 		
-		onDragging: function(e, ui) {
-			//console.log("dragging");
+		_draggingConstrainer: function() {
+			var Px0 = this.$wrapper.offset().left;
+			var Px1 = Px0 + this.$wrapper.width();
+			var Py0 = this.$wrapper.offset().top;
+			var Py1 = Py0 + this.$wrapper.height();
+			
+			var Ix0 = this.$img.offset().left;
+			var Ix1 = Ix0 + this.$img.width();
+			var Iy0 = this.$img.offset().top;
+			var Iy1 = Iy0 + this.$img.height();
+			
+			var _pos = {};
+			if (Ix0 > Px0) {
+				_pos.left = 0;
+			}
+			if (Iy0 > Py0) {
+				_pos.top = 0;
+			}
+			if (Ix1 <Px1) {
+				_pos.left = 0-(this.$img.width()-this.$wrapper.width());
+			}
+			if (Iy1 <Py1) {
+				_pos.top = 0-(this.$img.height()-this.$wrapper.height());
+			}
+			return _pos;
 		},
 		
 		

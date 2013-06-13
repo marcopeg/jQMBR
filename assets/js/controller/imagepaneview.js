@@ -36,6 +36,7 @@ define([
 		$page = $(this);
 		$body = $page.find('[data-role=content]');
 		
+		
 		_pane = new ImagePaneView({
 			el: 		$body.find('img:first'),
 			
@@ -43,9 +44,7 @@ define([
 			startupDfd:	App.bodyFullsized($body),
 			
 			// bind render() to bodyFullsize 
-			updateEvt: 	'fullsize',
-			
-			mode: 'zoom'
+			updateEvt: 	'fullsize'
 		});
 		
 		
