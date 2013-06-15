@@ -64,6 +64,11 @@ define([
 	
 	
 	AppClass.prototype.bodyFullsized = function($obj) {
+		if ((!$obj || !$obj.length) && $.mobile && $.mobile.activePage) {
+			$obj = $.mobile.activePage.find('[data-role=content]');
+		} else {
+			$obj = $('[data-role=content]').first();
+		}
 		return __bodyFullsizeDfd($obj).promise();
 	};
 	
