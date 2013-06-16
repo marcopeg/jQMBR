@@ -93,5 +93,9 @@ define([
 	
 	
 	
+	
+	
+	
+	
 	return AppClass;
 });
