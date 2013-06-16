@@ -35,7 +35,6 @@ define([
 				resizeDuration:		200
 			}, (options || {}));
 			
-			
 			/**
 			 * Build reference to the image and it's container
 			 */
@@ -45,8 +44,8 @@ define([
 			} else {
 				this.$img = this.$el.find('img');
 				this.$container = this.$el;
-				if (!this.$img) {
-					this.$img = $('<img>').attr('src', options.src);
+				if (!this.$img.length) {
+					this.$img = $('<img>').attr('src', this.options.src);
 					this.$img.appendTo(this.$el);
 				}
 			}
