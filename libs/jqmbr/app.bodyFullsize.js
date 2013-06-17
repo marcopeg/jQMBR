@@ -32,44 +32,49 @@ define([
 		var dfd = $obj.data('bodyFullsizeDfd') || $.Deferred();
 		$obj.data('bodyFullsizeDfd', dfd);
 		return dfd;
-	}
+	};
+	
+	var __bodyFullsizeObj = function($obj) {
+		if (!$obj || !$obj.length) {
+			if ($.mobile && $.mobile.activePage) {
+				$obj = $.mobile.activePage.find('[data-role=content]');
+			} else {
+				$obj = $('[data-role=content]').first();
+			}
+		}
+		return $obj;
+	};
 	
 	
-	AppClass.prototype.bodyFullsize = function() {
-		if (!$.mobile.activePage) return;
-		
-		var $body = $.mobile.activePage.find('[data-role=content]');
-		if ($body.attr('data-fullsize') != 'true') return;
+	AppClass.prototype.bodyFullsize = function($obj) {
+		var $obj = __bodyFullsizeObj($obj);
+		if ($obj.attr('data-fullsize') != 'true') return;
 		
 		// setup new DFD for given DOM item
-		var dfd = __bodyFullsizeDfd($body);
+		var dfd = __bodyFullsizeDfd($obj);
 		
-		var $header = $.mobile.activePage.find('[data-role=header]');
-		var $footer = $.mobile.activePage.find('[data-role=footer]');
+		var $page	= $obj.parent('[data-role=page]');
+		var $header = $page.find('[data-role=header]');
+		var $footer = $page.find('[data-role=footer]');
 		
 		var height = $(window).height();
 		if ($header.length) height -= $header.outerHeight();
 		if ($footer.length) height -= $footer.outerHeight();
 		
-		$body.css({
+		$obj.css({
 			padding: 0,
 			height: height
 		});
 		
-		$body.trigger('fullsize');
-		dfd.resolveWith(this, [$body, height]);
+		$obj.trigger('fullsize');
+		dfd.resolveWith(this, [$obj, height]);
 		
 		return dfd.promise();
 	};
 	
 	
 	AppClass.prototype.bodyFullsized = function($obj) {
-		if ((!$obj || !$obj.length) && $.mobile && $.mobile.activePage) {
-			$obj = $.mobile.activePage.find('[data-role=content]');
-		} else {
-			$obj = $('[data-role=content]').first();
-		}
-		return __bodyFullsizeDfd($obj).promise();
+		return __bodyFullsizeDfd(__bodyFullsizeObj($obj)).promise();
 	};
 	
 	
@@ -77,6 +82,7 @@ define([
 	 * Automagically Setup
 	 */
 	$(document).delegate('[data-role="page"]', 'pageshow', function() {
+		//App.bodyFullsize($(this).find('[data-role=content]'));
 		App.bodyFullsize();
 		App.on('resize', App.bodyFullsize, App);
 	});
