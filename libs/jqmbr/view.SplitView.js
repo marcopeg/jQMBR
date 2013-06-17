@@ -76,11 +76,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	
 	var SplitView = Backbone.View.extend({
 		
-		ready: $.Deferred(),
-		_rendered: false,
-		
 		initialize: function(options) {
-			
 			this.options = $.extend({}, {
 				id:					__getNewId(),
 				startupDfd:			true,			// delay initialization for a DFD to resolve (es full page load...)
@@ -90,11 +86,23 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				resizable: 			'auto',
 				p1:					$('<div>'),
 				p2:					$('<div>'),
+				
+				// a list of Backbone.View on wich to call render() after instance render itself.
 				propagationChain:	[],
 				
 				// prevent fixed header and footer to go away when clicking on the body
-				stopClickPropagation:true
+				stopClickPropagation:true,
+				
+				// enable fadeIn effect in place of "show" when panels are ready.
+				startHidden:		true,
+				fadeIn:				true 
 			}, (options || {}));
+			
+			// hide panel at startup
+			if (this.options.startHidden) this.$el.hide();
+			
+			this.ready = $.Deferred();
+			this._rendered = false;
 			
 			// delayed initialization
 			$.when(options.startupDfd).then(_.bind(function() {
@@ -109,8 +117,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.type 				= this.options.type;
 			this.split 				= this.options.split;
 			this.propagationChain 	= this.options.propagationChain;
-			
-			
 			
 			
 			/**
@@ -273,6 +279,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			 */
 			if (this.options.updateEvt) {
 				this.$el.on(this.options.updateEvt, $.proxy(this.render, this));
+			}
+			
+			/**
+			 * Display SplitView panel!
+			 */
+			if (this.options.fadeIn) {
+				this.$el.fadeIn();
+			} else {
+				this.$el.show();
 			}
 			
 			this.render();
