@@ -30,7 +30,10 @@ define([
 				id:			'Link' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
 				class:		'',
 				style:		'',
-				attrs:		{}
+				attrs:		{},
+				
+				onClick:	this.onClick
+				
 			}, options || {});
 			
 			this.$el
@@ -51,16 +54,14 @@ define([
 				this.$el.attr(key, val);
 			}, this);
 			
-		},
-		
-		events: {
-			"click" : "onClick"
+			this.$el.on('click', _.bind(this.options.onClick, this));
+			
 		}
 		
 	});
 	
 	LinkView.prototype.onClick = function(e) {
-		this.trigger("click", e);
+		this.trigger('click', e);
 	};
 	
 	LinkView.prototype.click = function(e) {

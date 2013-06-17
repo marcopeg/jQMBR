@@ -426,6 +426,7 @@ define([
 		 * Utility to connect an ImagePane to a SplitView panel
 		 */
 		connectToSplitViewPanel: function($panel) {
+			if (!$panel || !$panel.length) return;
 			$panel.on('splitviewresize', $.proxy(function() {
 				this.$el.width($panel.width());
 				this.$el.height($panel.height());

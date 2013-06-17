@@ -28,12 +28,14 @@ define([
 		defaults: function(options) {
 			return {
 				id:			'Page' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
-				hash:		'',
 				title:		'', // title for page header
 				html:		'', // raw HTML content for the page
 				theme:		'c',
 				attrs:		{},
+				
+				// back button management
 				backBtn:	true,
+				onBackBtn:	this.onBackBtn,
 				
 				header: 	true,
 				content: 	true,
@@ -81,7 +83,7 @@ define([
 				this.$el.appendTo('body');
 			}
 			$.mobile.changePage(this.$el, $.extend({}, {
-				dataUrl: this.options.hash || this.options.id
+				dataUrl: this.options.id
 			}, options || {}, this.options.changePage));
 			return this;
 		},
@@ -108,7 +110,8 @@ define([
 		
 		this.header = new PageHeaderView($.extend({}, {
 			title:		this.options.title,
-			backBtn:	this.options.backBtn
+			backBtn:	this.options.backBtn,
+			onBackBtn:	_.bind(this.options.onBackBtn, this)
 		}, this.options.header, {
 			page: 		this
 		}));
@@ -137,9 +140,9 @@ define([
 	
 	
 	PageView.prototype.onPageCreate = function() {};
-	PageView.prototype.onPageShow = function() {};
-	PageView.prototype.onPageHide = function() {this.remove()};
-	
+	PageView.prototype.onPageShow 	= function() {};
+	PageView.prototype.onPageHide 	= function() {};
+	PageView.prototype.onBackBtn 	= function() {};
 	
 	
 	

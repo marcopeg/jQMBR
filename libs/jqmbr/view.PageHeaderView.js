@@ -24,6 +24,7 @@ define([
 				title:		'',
 				titleTag:	PageHeaderView.prototype.titleTag || 'h1',
 				backBtn:	true,
+				onBackBtn:	this.onBackBtn,
 				theme:		PageHeaderView.prototype.theme || '',
 				attrs:		{}
 			}, options || {});
@@ -72,7 +73,10 @@ define([
 		
 		var linkOptions = {
 			show:	btn.show,
-			attrs: {}
+			attrs: 	{},
+			onClick: _.bind(this.options.onBackBtn, this)
+			
+			//_.bind(this.options.onBackBtn, this)
 		};
 		
 		$.extend(linkOptions.attrs, {
@@ -86,7 +90,7 @@ define([
 		
 	};
 	
-	
+	PageHeaderView.prototype.onBackBtn = function(e) {};
 	
 		
 	
