@@ -8,15 +8,17 @@
  */
 define([
 	'jquery', 'underscore', 'backbone',
-	'./view.LinkView'
+	'./view.GeneralView',
+	'./view.BtnView'
 
 ], function(
 	$, _, Backbone,
-	LinkView
+	GeneralView,
+	BtnView
 
 ) {
 	
-	var PageHeaderView = Backbone.View.extend({
+	var PageHeaderView = GeneralView.extend({
 		
 		initialize: function(options) {
 			
@@ -25,9 +27,10 @@ define([
 				titleTag:	PageHeaderView.prototype.titleTag || 'h1',
 				backBtn:	true,
 				onBackBtn:	this.onBackBtn,
-				theme:		PageHeaderView.prototype.theme || '',
+				theme:		PageHeaderView.prototype.theme || 'c',
 				attrs:		{}
 			}, options || {});
+			
 			
 			this.$el
 				.attr('data-role', 'header')
@@ -73,6 +76,7 @@ define([
 		
 		var linkOptions = {
 			show:	btn.show,
+			icon:	btn.icon,
 			attrs: 	{},
 			onClick: _.bind(this.options.onBackBtn, this)
 			
@@ -80,12 +84,11 @@ define([
 		};
 		
 		$.extend(linkOptions.attrs, {
-			"data-icon" 		: btn.icon,
 			"data-rel"			: btn.rel,
 			"data-direction" 	: "reverse"
 		}, btn.attrs);
 		
-		this.backBtn = new LinkView(linkOptions);
+		this.backBtn = new BtnView(linkOptions);
 		this.$el.prepend(this.backBtn.$el);
 		
 	};

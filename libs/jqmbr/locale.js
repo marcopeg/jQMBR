@@ -10,9 +10,15 @@ define(['jquery', 'underscore'], function($, _) {
 	/**
 	 * Constructor
 	 */
-	var LocaleClass = function() {
-		this.name 		= 'AppName';
-		this.version 	= '001';
+	var LocaleClass = function(options) {
+		
+		options = $.extend({}, {
+			name:		'AppName',
+			version:	'001'
+		}, options||{});
+		
+		this.name 		= options.name;
+		this.version 	= options.version;
 	};
 	
 	
@@ -63,12 +69,6 @@ define(['jquery', 'underscore'], function($, _) {
 	
 	
 	
-	// singletone instance
-	if (!window.Locale) {
-		window.Locale = new LocaleClass();
-	}
-	
-	// export module
-	return window.Locale;
+	return LocaleClass;
 	
 });

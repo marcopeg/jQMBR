@@ -8,7 +8,8 @@
  */
 
 define([
-	'jquery', 'backbone'
+	'jquery', 'backbone',
+	//'./backboneObjects'
 	
 
 ], function(

@@ -3,7 +3,7 @@
  * JqueryMobile + BackboneJS + RequireJS
  * =====================================
  *
- * Generic Link
+ * JQueryMobile Button
  *
  */
 define([
@@ -16,7 +16,7 @@ define([
 
 ) {
 	
-	var LinkView = GeneralView.extend({
+	var BtnView = GeneralView.extend({
 		
 		tagName: 'a',
 		
@@ -45,6 +45,7 @@ define([
 				.attr('id', 	this.options.id)
 				.attr('class', 	this.options.class)
 				.attr('style', 	this.options.style)
+				.attr('data-role', 'button')
 			;
 			
 			// some known attributes from the global configuration
@@ -58,19 +59,24 @@ define([
 			
 			this.$el.on('click', _.bind(this.options.onClick, this));
 			
+		},
+		
+		render: function() {
+			this.$el.button();
+			return this;
 		}
 		
 	});
 	
-	LinkView.prototype.onClick = function(e) {
+	BtnView.prototype.onClick = function(e) {
 		this.trigger('click', e);
 	};
 	
-	LinkView.prototype.click = function(e) {
+	BtnView.prototype.click = function(e) {
 		this.$el.click();
 	};
 	
 	
-	return LinkView;
+	return BtnView;
 	
 });

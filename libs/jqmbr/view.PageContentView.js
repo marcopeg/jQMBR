@@ -7,14 +7,16 @@
  *
  */
 define([
-	'jquery', 'underscore', 'backbone'
+	'jquery', 'underscore', 'backbone',
+	'./view.GeneralView',
 
 ], function(
-	$, _, Backbone
+	$, _, Backbone,
+	GeneralView
 
 ) {
 	
-	var PageContentView = Backbone.View.extend({
+	var PageContentView = GeneralView.extend({
 		
 		initialize: function(options) {
 			
@@ -27,16 +29,6 @@ define([
 		}
 		
 	});
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
 	
 	
 	

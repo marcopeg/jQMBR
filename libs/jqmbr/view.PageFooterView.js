@@ -7,14 +7,16 @@
  *
  */
 define([
-	'jquery', 'underscore', 'backbone'
+	'jquery', 'underscore', 'backbone',
+	'./view.GeneralView',
 
 ], function(
-	$, _, Backbone
+	$, _, Backbone,
+	GeneralView
 
 ) {
 	
-	var PageFooterView = Backbone.View.extend({
+	var PageFooterView = GeneralView.extend({
 		
 		initialize: function() {
 			
@@ -23,18 +25,6 @@ define([
 		}
 		
 	});
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
 	
 	return PageFooterView;
 	

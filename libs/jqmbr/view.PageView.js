@@ -8,46 +8,54 @@
  */
 define([
 	'jquery', 'underscore', 'backbone',
+	'jqmbr/view.GeneralView',
 	'./view.PageHeaderView',
 	'./view.PageContentView',
 	'./view.PageFooterView'
 
 ], function(
 	$, _, Backbone,
+	GeneralView,
 	PageHeaderView,
 	PageContentView,
 	PageFooterView
 
 ) {
 	
-	var PageView = Backbone.View.extend({
-		
+	
+	var PageView = GeneralView.extend({
+	
 		/**
 		 * Allow to override defaults in sub classes
 		 */
 		defaults: function(options) {
 			return {
-				id:			'Page' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
-				title:		'', // title for page header
-				html:		'', // raw HTML content for the page
-				theme:		'c',
-				attrs:		{},
+				id:				'Page' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
+				title:			'', // title for page header
+				html:			'', // raw HTML content for the page
+				theme:			'c',
+				headerTheme:	'b',
+				attrs:			{},
 				
 				// back button management
-				backBtn:	true,
-				onBackBtn:	this.onBackBtn,
+				backBtn:		true,
+				onBackBtn:		this.onBackBtn,
 				
-				header: 	true,
-				content: 	true,
-				footer: 	false,
+				header: 		true,
+				content: 		true,
+				footer: 		false,
 				
 				// events callbacks
-				pageCreate:	this.onPageCreate,
-				pageShow:	this.onPageShow,
-				pageHide:	this.onPageHide,
+				beforeCreate: 	this.beforePageCreate,
+				pageCreate:		this.onPageCreate,
+				pageShow:		this.onPageShow,
+				pageHide:		this.onPageHide,
 				
 				// general change page configuration used when render and display this page
-				changePage: {}
+				changePage: 	{},
+				
+				// auto rendering options
+				autoRender:		false		// [false|true|ready]
 			};
 		},
 		
@@ -55,15 +63,15 @@ define([
 			
 			this.options = $.extend({}, this.defaults(options), options || {});
 			
-			this.$el
-				.attr('id', this.options.id)
-				.attr('data-role', 'page')
-				.attr('data-theme', this.options.theme)
-			;
-			
 			// apply custom attributes
-			_.each(this.options.attrs, function(val, key) {this.$el.attr(key, val)}, this);
+			_.each($.extend({},{
+				id:				this.options.id,
+				'data-role':	'page',
+				'data-theme':	this.options.theme
+			},this.options.attrs), 
+				function(val, key) {this.$el.attr(key, val)}, this);
 			
+			// page main pieces
 			this.header 	= null;
 			this.content 	= null;
 			this.footer 	= null;
@@ -76,9 +84,12 @@ define([
 			this.$el.on('pageshow', 	_.bind(this.options.pageShow	, this));
 			this.$el.on('pagehide', 	_.bind(this.options.pageHide	, this));
 			
+			// handle auto rendering
+			this.autoRender();
 		},
 		
 		render: function(options) {
+			this.options.beforeCreate.apply(this, arguments);
 			if (!this.$el.parent().length) {
 				this.$el.appendTo('body');
 			}
@@ -104,12 +115,15 @@ define([
 	
 	
 	
+	
+	
 	PageView.prototype._initializeHeader = function() {
 		if (this.options.header === false ) return;
 		if (this.options.header === true) this.options.header = {};
 		
 		this.header = new PageHeaderView($.extend({}, {
 			title:		this.options.title,
+			theme:		this.options.headerTheme,
 			backBtn:	this.options.backBtn,
 			onBackBtn:	_.bind(this.options.onBackBtn, this)
 		}, this.options.header, {
@@ -139,17 +153,30 @@ define([
 	
 	
 	
-	PageView.prototype.onPageCreate = function() {};
-	PageView.prototype.onPageShow 	= function() {};
-	PageView.prototype.onPageHide 	= function() {};
-	PageView.prototype.onBackBtn 	= function() {};
+	
+	/**
+	 * Child object callbacks
+	 */
+	PageView.prototype.beforePageCreate = function() {};
+	PageView.prototype.onPageCreate 	= function() {};
+	PageView.prototype.onPageShow 		= function() {};
+	PageView.prototype.onPageHide 		= function() {};
+	PageView.prototype.onBackBtn 		= function() {};
 	
 	
 	
-		
 	
 	
 	
+	/**
+	 * Back Action
+	 * (using header's back btn if available)
+	 */
+	PageView.prototype.back = function() {
+		if (this.header && this.header.backBtn) {
+			this.header.backBtn.click();
+		}
+	};
 	
 	
 	return PageView;
