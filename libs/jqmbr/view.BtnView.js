@@ -28,6 +28,7 @@ define([
 				title:		'',
 				icon:		'',
 				iconPos:	'',
+				theme:		null,
 				
 				id:			'Link' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
 				class:		'',
@@ -37,6 +38,7 @@ define([
 				onClick:	this.onClick
 				
 			}, options || {});
+			
 			
 			this.$el
 				.append(this.options.show)
@@ -49,8 +51,9 @@ define([
 			;
 			
 			// some known attributes from the global configuration
-			if (this.options.icon.length) this.options.attrs["data-icon"] = this.options.icon;
-			if (this.options.iconPos.length) this.options.attrs["data-iconpos"] = this.options.iconPos;
+			if (this.options.theme) 			this.options.attrs["data-theme"] 		= this.options.theme;
+			if (this.options.icon.length) 		this.options.attrs["data-icon"] 		= this.options.icon;
+			if (this.options.iconPos.length) 	this.options.attrs["data-iconpos"] 		= this.options.iconPos;
 			
 			
 			_.each(this.options.attrs, function(val, key) {
