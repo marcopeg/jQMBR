@@ -41,7 +41,7 @@ define([
 		
 		
 		var content = $obj.html();
-		var $wrap 	= $('<div style="padding:15px">');
+		var $wrap 	= $('<div style="padding:15px;min-height:90%">');
 		$obj.attr('data-fullsize', 'true').empty().append($wrap);
 		
 		// apply iScroll

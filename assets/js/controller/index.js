@@ -8,8 +8,10 @@
  */
 
 define([
-	'jquery', 'backbone', 
-	'app'
+	'jquery', 'jqmbr/backbone', 
+	'app',
+	
+	'controller/chained-pages'
 
 
 ], function(
@@ -33,10 +35,15 @@ define([
 	$(document).delegate(_page, 'pagecreate', function() {
 		$page = $(this);
 		$body = $page.find('[data-role=content]');
-		console.log('index works');
 	});
 	
-	$(document).delegate(_page, 'pageshow', function() {});
+	$(document).delegate(_page, 'pageshow', function() {
+		
+		
+		//new ChainedPage2();
+		
+		
+	});
 	
 	/**
 	 * Unload page DOM items and free private vars 
@@ -47,8 +54,6 @@ define([
 		$page = null;
 		$body = null;
 	});
-
-	
 	
 	
 });
