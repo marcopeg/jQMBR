@@ -26,7 +26,13 @@ define([
 ], function(
 	$,
 	AppClass
-) {
+) {	
+
+	/*
+	$('document').bind("touchmove",function(e){
+		e.preventDefault();
+	});
+	*/
 	
 	
 	
@@ -60,6 +66,9 @@ define([
 			$wrap.html(content);
 			dfd.resolveWith(this);
 		}
+		
+		// prevent default page scroll behavior on mobile device!
+		$obj.parent().bind("touchmove",function(e){e.preventDefault()});
 		
 		// click on headerbar will scroll top internal page!
 		var $page	= $obj.parent('[data-role=page]');
@@ -98,6 +107,8 @@ define([
 	
 	var __initBodyScrollin = function($obj, $wrap, content) {
 		var iS = new iScroll($obj[0], {
+			// allow to control forms and select text!
+			onBeforeScrollStart: function(e) {return true},
 			onScrollEnd: function() {
 				$obj.data('iScrollLeft', this.x);
 				$obj.data('iScrollTop', this.y);
