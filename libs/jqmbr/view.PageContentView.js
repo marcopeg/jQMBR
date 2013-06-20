@@ -21,10 +21,18 @@ define([
 		initialize: function(options) {
 			
 			this.options = $.extend({}, {
-				html:		''
+				html:		'',
+				attrs:		{}
 			}, options || {});
 			
-			this.$el.attr('data-role', 'content').append(this.options.html);
+			
+			// apply custom attributes
+			_.each($.extend({},{
+				'data-role':	'content'
+			},this.options.attrs), function(val, key) {this.$el.attr(key, val)}, this);
+			
+			this.$el.html(this.options.html);
+			
 			
 		}
 		
