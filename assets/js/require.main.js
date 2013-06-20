@@ -24,6 +24,7 @@ require([
 	'controller/splitview',
 	'controller/imagepaneview',
 	'controller/imagepaneview-splitview',
+	'controller/scrollin',
 	
 	'controller/splitview-chain-a',
 	'controller/splitview-chain-b',
