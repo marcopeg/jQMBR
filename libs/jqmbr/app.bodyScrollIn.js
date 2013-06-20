@@ -64,7 +64,7 @@ define([
 		// click on headerbar will scroll top internal page!
 		var $page	= $obj.parent('[data-role=page]');
 		var $header = $page.find('[data-role=header]');
-		$header.not('a').on('click', function() {
+		$header.find(':header').on('click', function() {
 			try {
 				$obj.stop().data('iScroll').scrollTo(0,0,300);
 			} catch (e) {
@@ -97,7 +97,13 @@ define([
 	};
 	
 	var __initBodyScrollin = function($obj, $wrap, content) {
-		var iS = new iScroll($obj[0]);
+		var iS = new iScroll($obj[0], {
+			onScrollEnd: function() {
+				$obj.data('iScrollLeft', this.x);
+				$obj.data('iScrollTop', this.y);
+			}
+		});
+		
 		$obj.data('iScroll', iS);
 		$obj.data('bodyScrollinInit', true);
 		$wrap.html(content);
