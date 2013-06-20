@@ -34,6 +34,11 @@ define([
 				afterRender: 	this.afterRender
 			}, options||{});
 			
+			// transform a tring template into a real UnderscoreJS template
+			if (_.isString(this.options.template)) {
+				this.options.template = _.template(this.options.template);
+			}
+			
 			this.autoRender();
 		},
 		
