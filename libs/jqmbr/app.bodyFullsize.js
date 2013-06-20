@@ -35,7 +35,7 @@ define([
 	};
 	
 	var __bodyFullsizeObj = function($obj) {
-		if (!$obj || !$obj.length) {
+		if (!$obj || !$obj.length || ($obj[0] && $obj[0].target)) {
 			if ($.mobile && $.mobile.activePage) {
 				$obj = $.mobile.activePage.find('[data-role=content]');
 			} else {
@@ -82,7 +82,6 @@ define([
 	 * Automagically Setup
 	 */
 	$(document).delegate('[data-role="page"]', 'pageshow', function() {
-		//App.bodyFullsize($(this).find('[data-role=content]'));
 		App.bodyFullsize();
 		App.on('resize', App.bodyFullsize, App);
 	});
