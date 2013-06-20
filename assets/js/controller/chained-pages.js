@@ -63,6 +63,11 @@
 					iconPos: 	'right'
 				}).renderTo(this.header.$el);
 				
+				this.content.$el
+					.append('<hr>')
+					.append('<input type="text" name="aaa">')
+				;
+				
 			}
 			
 		});

@@ -11,6 +11,7 @@ define([
 	'jquery', 'jqmbr/backbone', 
 	'app',
 	
+	// some examples logic dependencies
 	'controller/chained-pages'
 
 
@@ -37,13 +38,6 @@ define([
 		$body = $page.find('[data-role=content]');
 	});
 	
-	$(document).delegate(_page, 'pageshow', function() {
-		
-		
-		//new ChainedPage2();
-		
-		
-	});
 	
 	/**
 	 * Unload page DOM items and free private vars 
