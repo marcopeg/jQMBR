@@ -28,14 +28,13 @@ define([
 				backBtn:	true,
 				onBackBtn:	this.onBackBtn,
 				theme:		PageHeaderView.prototype.theme || 'c',
+				fixed:		true,
 				attrs:		{}
 			}, options || {});
 			
-			
-			this.$el
-				.attr('data-role', 'header')
-				.attr('data-theme', this.options.theme)
-			;
+			this.options.attrs['data-role'] = 'header';
+			if (this.options.theme) this.options.attrs['data-theme'] = this.options.theme;
+			if (this.options.fixed) this.options.attrs['data-fixed'] = this.options.fixed;
 			
 			// apply custom attributes
 			_.each(this.options.attrs, function(val, key) {this.$el.attr(key, val)}, this);
@@ -78,7 +77,10 @@ define([
 			show:	btn.show,
 			icon:	btn.icon,
 			attrs: 	{},
-			onClick: _.bind(this.options.onBackBtn, this)
+			onClick: _.bind(function() {
+				this.options.page.trigger('backbtnclick');
+				this.options.onBackBtn.call(this);
+			}, this)
 			
 			//_.bind(this.options.onBackBtn, this)
 		};
