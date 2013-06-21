@@ -25,6 +25,8 @@ define([
 		
 		initialize: function(options) {
 			this.options = $.extend({}, {
+				parent:			null,
+				container:		null,						// DOM element to append content to
 				autoRender: 	true,
 				template:		this.template,
 				data:			this.data,
@@ -39,6 +41,9 @@ define([
 			if (_.isString(this.options.template)) {
 				this.options.template = _.template(this.options.template);
 			}
+			
+			// export parent property
+			this.parent = this.options.parent;
 			
 			this.options.afterInitialize.apply(this, arguments);
 			this.autoRender();
