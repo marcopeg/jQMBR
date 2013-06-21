@@ -35,9 +35,10 @@
 			id:			'chained-page1',
 			title:		'ChainedPage1',
 			autoRender: true,
+			//scrollin:	false,
 			
 			
-			beforeCreate: function() {
+			beforePageCreate: function() {
 				
 				// add some dynamic text using a TemplateView object
 				new Backbone.jqmbr.TemplateView({
@@ -63,16 +64,45 @@
 					iconPos: 	'right'
 				}).renderTo(this.header.$el);
 				
-				this.content.$el
-					.append('<hr>')
-					.append('<input type="text" name="aaa">')
-				;
+				this.content.$el.append('<hr>');
+				
+				// add some input controls to test
+				this.input = new TestInput01({container: this.content});
+				this.textarea = new TestInput02({container: this.content});
 				
 			}
 			
 		});
 		
 	});
+	
+	
+	var TestInput01 = Backbone.jqmbr.TemplateView.extend({
+		template: 	'<input type="text" placeholder="<%= data.pl %>" /><p></p>',
+		data: 		{pl:'try write some text on me!'},
+		events: {
+			"keyup input" : "onChange"
+		},
+		onChange: function() {
+			this.$el.find('p').html(this.$el.find('input').val());
+		}
+	});
+	
+	var TestInput02 = Backbone.jqmbr.TemplateView.extend({
+		template: 	'<textarea type="text" placeholder="<%= data.pl %>"></textarea><p></p>',
+		data: 		{pl:'try write some text on me!'},
+		events: {
+			"keyup textarea" : "onChange"
+		},
+		onChange: function() {
+			this.$el.find('p').html(this.$el.find('textarea').val());
+		}
+	});
+	
+	
+	
+	
+	
 	
 	
 	/**
@@ -88,6 +118,6 @@
 	$(document).delegate('[href="#ChainedPage3"]', 'click', function(e) {
 		e.preventDefault();
 		new ChainedPage3;
-	});
+	});	
 	
 });
