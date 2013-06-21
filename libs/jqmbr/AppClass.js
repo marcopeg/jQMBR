@@ -74,6 +74,7 @@ define([
 	 * $.Deferred()
 	 */
 	AppClass.prototype.isDeferredObject = function(obj) {
+		if (!obj || !obj.state) return false;
 		if (typeof obj.state == 'function') {
 			return true;
 		} else {

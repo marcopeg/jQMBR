@@ -113,21 +113,32 @@ define([
 	 * object when first usage happen.
 	 */
 	AppClass.prototype.utils.View.ready = function(callback, context) {
+		var that 	= this;
+		context 	= context || this;
+		
 		// implicit initialization od internal deferred object
 		if (!this._ready) {
 			this._ready = $.Deferred();
 		}
+		// resolve deferred object with another deferred object!
+		// (useful with SQLite library!)
+		if (AppClass.prototype.isDeferredObject(callback)) {
+			$.when(callback).then(
+				function() {that.ready(true, context)},
+				function() {that.ready(false, context)}
+			);
+			return this;
+		}
 		// resolve deferred
 		if (callback === true) {
-			this._ready.resolveWith(this);
+			this._ready.resolveWith(context);
 			return this;
 		// reject deferred object
 		} else if (callback === false) {
-			this._ready.rejectWith(this);
+			this._ready.rejectWith(context);
 			return this;
 		}
 		// check deferred to run some logic
-		context = context || this;
 		if (_.isFunction(callback)) this._ready.done(_.bind(callback, context));
 		return this._ready;
 	};
@@ -149,8 +160,8 @@ define([
 	};
 	
 	// shortcut to above API
-	AppClass.prototype.utils.View.setReady = function() {this.ready(true)};
-	AppClass.prototype.utils.View.setFailed = function() {this.ready(false)};
+	AppClass.prototype.utils.View.setReady 		= function(context) {this.ready(true, context)};
+	AppClass.prototype.utils.View.setFailed 	= function(context) {this.ready(false, context)};
 	
 	AppClass.prototype.utils.View.renderWhenReady = function() {
 		this.ready(this.render, this);
