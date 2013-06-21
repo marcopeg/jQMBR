@@ -45,10 +45,9 @@ define([
 		// setup new DFD for given DOM item
 		var dfd = __bodyScrollinDfd($obj);
 		
-		
-		var content = $obj.html();
-		var $wrap 	= $('<div style="padding:15px;min-height:90%">');
-		$obj.attr('data-fullsize', 'true').empty().append($wrap);
+		// apply internal wrapper to use with iScroll
+		var $wrap 	= $('<div style="padding:15px;min-height:90%">').append($obj.children()).appendTo($obj);
+		$obj.attr('data-fullsize', 'true');
 		
 		// apply iScroll
 		if (window.iScroll) {
@@ -57,7 +56,8 @@ define([
 					__updateBodyScrollin($obj, $wrap);
 					dfd.resolveWith(this);
 				} else {
-					__initBodyScrollin($obj, $wrap, content);
+					//__initBodyScrollin($obj, $wrap, content);
+					__initBodyScrollin($obj, $wrap);
 				}
 			}, this));
 		
@@ -108,7 +108,11 @@ define([
 	var __initBodyScrollin = function($obj, $wrap, content) {
 		var iS = new iScroll($obj[0], {
 			// allow to control forms and select text!
-			onBeforeScrollStart: function(e) {return true},
+			onBeforeScrollStart: function(e) {
+				var ok = ['INPUT', 'TEXTAREA', 'SELECT', 'RADIO'];
+				if (ok.indexOf(e.target.tagName.toUpperCase()) != -1) return true;
+				e.preventDefault();
+			},
 			onScrollEnd: function() {
 				$obj.data('iScrollLeft', this.x);
 				$obj.data('iScrollTop', this.y);
@@ -117,7 +121,7 @@ define([
 		
 		$obj.data('iScroll', iS);
 		$obj.data('bodyScrollinInit', true);
-		$wrap.html(content);
+		//$wrap.html(content);
 		iS.refresh();
 	};
 	
@@ -138,7 +142,8 @@ define([
 	 * it is real better to call bodyScrollin($target) in "pagecreate" event!
 	 */
 	$(document).delegate('[data-role="page"]', 'pageshow', function() {
-		App.bodyScrollin();
+		var $candidate = $('[data-role="page"]:visible [data-scrollin="true"]');
+		if ($candidate.length) App.bodyScrollin($candidate);
 	});
 	
 });
