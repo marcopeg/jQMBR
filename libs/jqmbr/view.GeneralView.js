@@ -21,7 +21,7 @@ define([
 	
 	var GeneralView = Backbone.View.extend();
 	$.extend(GeneralView.prototype, AppClass.prototype.utils.View);
-	
+	GeneralView.prototype._render = function() {return this};
 	return GeneralView;
 	
 });
