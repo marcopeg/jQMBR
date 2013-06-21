@@ -55,16 +55,19 @@ define([
 				onBackBtn:		this.onBackBtn,
 				destroyOnBack: 	true,
 				
+				// implement loading widget until page ready
+				loading:		true,
+				
 				header: 		true,
 				content: 		true,
 				footer: 		false,
 				
 				// events callbacks
-				pageInitialize:	this.pageInitialize,
-				beforeCreate: 	this.beforePageCreate,
-				pageCreate:		this.onPageCreate,
-				pageShow:		this.onPageShow,
-				pageHide:		this.onPageHide,
+				pageInitialize:		this.pageInitialize,
+				beforePageCreate: 	this.beforePageCreate,
+				pageCreate:			this.pageCreate,
+				pageShow:			this.pageShow,
+				pageHide:			this.pageHide,
 				
 				// general change page configuration used when render and display this page
 				changePage: 	{},
@@ -80,6 +83,12 @@ define([
 		initialize: function(options) {
 			
 			this.options = $.extend({}, this.defaults(options), options || {});
+			
+			// loading widget implementation (with autoRender enabled)
+			if (this.options.loading && this.options.autoRender != false) {
+				$.mobile.loading("show");
+				this.ready(function() {$.mobile.loading("show")});
+			}
 			
 			// apply custom attributes
 			_.each($.extend({},{
@@ -132,7 +141,15 @@ define([
 		},
 		
 		render: function(options) {
-			this.options.beforeCreate.apply(this, arguments);
+			
+			// loading widget implementation (without autorender enabled)
+			if (this.options.loading && this.options.autoRender === false) {
+				$.mobile.loading("show");
+				this.ready(function() {$.mobile.loading("show")});
+			}
+			
+			// callback
+			this.options.beforePageCreate.apply(this, arguments);
 			
 			if (!this.$el.parent().length) {
 				this.$el.appendTo('body');
@@ -215,9 +232,9 @@ define([
 	 */
 	PageView.prototype.pageInitialize 	= function() {};
 	PageView.prototype.beforePageCreate = function() {};
-	PageView.prototype.onPageCreate 	= function() {};
-	PageView.prototype.onPageShow 		= function() {};
-	PageView.prototype.onPageHide 		= function() {};
+	PageView.prototype.pageCreate 		= function() {};
+	PageView.prototype.pageShow 		= function() {};
+	PageView.prototype.pageHide 		= function() {};
 	PageView.prototype.onBackBtn 		= function() {};
 	
 	
