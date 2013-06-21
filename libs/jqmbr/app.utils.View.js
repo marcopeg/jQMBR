@@ -7,13 +7,13 @@
  */
 
 define([
-	'jquery',
+	'jquery', 'backbone',
 	'./AppClass',
 	'./app.utils'
 	
 
 ], function(
-	$, 
+	$, Backbone,
 	AppClass
 	
 ) {
@@ -35,7 +35,11 @@ define([
 	 */
 	
 	AppClass.prototype.utils.View.appendTo = function($target) {
-		this.$el.appendTo($target);
+		if ($target instanceof Backbone.View) {
+			this.$el.appendTo($target.el);
+		} else {
+			this.$el.appendTo($target);
+		}
 		return this;
 	};
 	
@@ -125,6 +129,22 @@ define([
 		// check deferred to run some logic
 		context = context || this;
 		if (_.isFunction(callback)) this._ready.done(_.bind(callback, context));
+		return this._ready;
+	};
+	
+	AppClass.prototype.utils.View.error = function(callback, context) {
+		// implicit initialization od internal deferred object
+		if (!this._ready) {
+			this._ready = $.Deferred();
+		}
+		// resolve deferred
+		if (callback === true) {
+			this._ready.rejectWith(this);
+			return this;
+		}
+		// check deferred to run some logic
+		context = context || this;
+		if (_.isFunction(callback)) this._ready.fail(_.bind(callback, context));
 		return this._ready;
 	};
 	
