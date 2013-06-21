@@ -21,6 +21,7 @@ define([
 	
 	$.extend(GeneralCollection.prototype, {
 		ready:		AppClass.prototype.utils.View.ready,
+		error:		AppClass.prototype.utils.View.error,
 		setReady:	AppClass.prototype.utils.View.setReady,
 		setFailed:	AppClass.prototype.utils.View.setFailed
 	});
