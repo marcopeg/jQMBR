@@ -30,6 +30,7 @@ define([
 				data:			this.data,
 				dataVar:		this.dataVar,				// explicit variables tpl namespace
 				modelVar:		this.modelVar,				// model tpl namespace
+				afterInitialize:this.afterInitialize,
 				beforeRender: 	this.beforeRender,
 				afterRender: 	this.afterRender
 			}, options||{});
@@ -39,10 +40,17 @@ define([
 				this.options.template = _.template(this.options.template);
 			}
 			
+			this.options.afterInitialize.apply(this, arguments);
 			this.autoRender();
 		},
 		
 		render: function() {
+			
+			// auto append to existing DOM
+			if (!this.$el.parent().length && this.options.container) {
+				this.appendTo(this.options.container);
+			}
+			
 			this.options.beforeRender.apply(this, arguments);
 			this.$el.html(this.options.template(this.templateData()));
 			this.options.afterRender.apply(this, arguments);
@@ -69,6 +77,7 @@ define([
 			return _data;
 		},
 		
+		afterInitialize: function() {},
 		beforeRender: function() {},
 		afterRender: function() {}
 		
