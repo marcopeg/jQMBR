@@ -59,18 +59,10 @@ define([
 			if (this.options.theme) this.$el.attr('data-theme', this.options.theme);
 			
 			// run disclose callback
-			this.options.onDisclose = this.options.onDisclose || this.options.disclose;
-			this.on('disclose', _.bind(this.options.onDisclose, this));
+			this.on('disclose', _.bind(this.options.disclose, this));
 			
 			this.options.afterInitialize.apply(this, arguments);
-			
-			// auto render "ready" binds to model to be ready!
-			// model's need to extend GeneralModel!!
-			if (this.options.autoRender == 'ready') {
-				try {this.autoRender(this.collection.ready())} catch(e) {};
-			} else {
-				this.autoRender();
-			}
+			this.autoRender();
 		},
 		
 		render: function() {
@@ -100,20 +92,11 @@ define([
 				}
 				
 				// create subView and render to the list
-				var itemView = new this.options.itemView(cfg);
-				itemView.$el.data('model', item);
-				itemView.renderTo(this);
-				this.items.push(itemView);
+				this.items.push(new this.options.itemView(cfg).renderTo(this));
 			}, this);
 			
 			this.options.afterRender.apply(this, arguments);
-			this.trigger('render');
-			return this;
-		},
-		
-		// apply as jquerymobile widget
-		widget: function(cfg) {
-			this.$el.listview(cfg||{}).listview("refresh");
+			
 			return this;
 		},
 		

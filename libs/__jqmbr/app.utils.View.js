@@ -179,20 +179,11 @@ define([
 	 * 
 	 * "ready" model will use the renderWhenReady() method
 	 */
-	AppClass.prototype.utils.View.autoRender = function(doit) {
-		
-		doit = doit || this.options.autoRender;
-		
-		if (typeof doit == undefined) return;
-		
-		if (doit === true) {
+	AppClass.prototype.utils.View.autoRender = function() {
+		if (typeof this.options.autoRender == undefined) return;
+		if (this.options.autoRender === true) {
 			this.render();
-		
-		// auto render with explicit deferred object
-		} else if (AppClass.prototype.isDeferredObject(doit)) {
-			$.when(doit).then(_.bind(this.render, this));
-			
-		} else if (doit === 'ready') {
+		} else if(this.options.autoRender === 'ready') {
 			this.renderWhenReady();
 		}
 	};

@@ -58,15 +58,6 @@ define([
 		var $footer = $page.find('[data-role=footer]');
 		
 		var height = $(window).height();
-		
-		// fix iphone mobile safari fucking urlbar height in both portrait and landscape mode!!!
-		if (height == 356 && window.outerHeight == 416 || height == 356 && window.outerHeight == 420) {
-			height = 416;
-		} else if (height == 208 && window.outerHeight == 416 || height == 208 && window.outerHeight == 300 || height == 208 && window.outerHeight == 268) {
-			height = 268;
-		}
-		
-		
 		if ($header.length) height -= $header.outerHeight();
 		if ($footer.length) height -= $footer.outerHeight();
 		

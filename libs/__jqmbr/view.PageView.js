@@ -51,7 +51,7 @@ define([
 				attrs:			{},
 				
 				// back button management
-				backBtn:		true,				// set to "history" to implement history back with backbone router...
+				backBtn:		true,
 				onBackBtn:		this.onBackBtn,
 				destroyOnBack: 	true,
 				
@@ -81,14 +81,8 @@ define([
 		},
 		
 		initialize: function(options) {
-			var that = this;
 			
 			this.options = $.extend({}, this.defaults(options), options || {});
-			
-			// these DeferredObjects are solved
-			this._pagecreate 	= $.Deferred();
-			this._pageshow 		= $.Deferred();
-			this._pagehide		= $.Deferred();
 			
 			// loading widget implementation (with autoRender enabled)
 			if (this.options.loading && this.options.autoRender != false) {
@@ -117,48 +111,30 @@ define([
 			// (es after a back of another page)
 			if (this.options.scrollin) {
 				this.content.$el.attr('data-scrollin', 'true');
-				this.$el.on('pagebeforehide', function() {
-					that._resetScroll = that.content.$el.data('iScrollTop');
-				});
-				this.$el.on('pageshow', function() {
-					if (!that._resetScroll) return;
-					that.content.$el.data('iScroll').scrollTo(0, that._resetScroll, 300);
-				});
+				this.$el.on('pagebeforehide', _.bind(function() {
+					this._resetScroll = this.content.$el.data('iScrollTop');
+				}, this));
+				this.$el.on('pageshow', _.bind(function() {
+					if (!this._resetScroll) return;
+					this.content.$el.data('iScroll').scrollTo(0, this._resetScroll, 300);
+				}, this));
 			}
 			
-			
-			// callback
-			this.options.pageInitialize.apply(this, arguments);
-			
-			// bind jQueryMobile page events
-			/*
 			this.$el.on('pagecreate', 	_.bind(this.options.pageCreate	, this));
 			this.$el.on('pageshow', 	_.bind(this.options.pageShow	, this));
 			this.$el.on('pagehide', 	_.bind(this.options.pageHide	, this));
-			*/
-			this.$el.on('pagecreate', function(e) {
-				that._pagecreate.resolveWith(that);
-				that.options.pageCreate.apply(that, arguments);
-			});
-			
-			this.$el.on('pageshow', function(e) {
-				that._pageshow.resolveWith(that);
-				that.options.pageShow.apply(that, arguments);
-			});
-			
-			this.$el.on('pagehide', function(e) {
-				that._pagehide.resolveWith(that);
-				that.options.pageHide.apply(that, arguments);
-			});
 			
 			// destroy page on back button option
 			if (this.options.destroyOnBack) {
-				this.on('backbtnclick', function() {
-					that.$el.on('pagehide', function() {
-						that.destroy();
-					});
-				});
+				this.on('backbtnclick', _.bind(function() {
+					this.$el.on('pagehide', _.bind(function() {
+						this.destroy();
+					}, this));
+				}, this));
 			}
+			
+			// callback
+			this.options.pageInitialize.apply(this, arguments);
 			
 			// handle auto rendering
 			this.autoRender();

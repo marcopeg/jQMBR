@@ -33,9 +33,8 @@ define([
 			}, options || {});
 			
 			this.options.attrs['data-role'] = 'header';
-			if (this.options.dataId) 	this.options.attrs['data-id'] 		= this.options.dataId;
-			if (this.options.theme) 	this.options.attrs['data-theme'] 	= this.options.theme;
-			if (this.options.fixed) 	this.options.attrs['data-position'] = 'fixed';
+			if (this.options.theme) this.options.attrs['data-theme'] = this.options.theme;
+			if (this.options.fixed) this.options.attrs['data-fixed'] = this.options.fixed;
 			
 			// apply custom attributes
 			_.each(this.options.attrs, function(val, key) {this.$el.attr(key, val)}, this);

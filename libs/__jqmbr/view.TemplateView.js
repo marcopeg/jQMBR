@@ -22,7 +22,6 @@ define([
 		data:		{},
 		dataVar:	'data',
 		modelVar:	'model',
-		css:		{},
 		
 		initialize: function(options) {
 			this.options = $.extend({}, {
@@ -35,8 +34,7 @@ define([
 				modelVar:		this.modelVar,				// model tpl namespace
 				afterInitialize:this.afterInitialize,
 				beforeRender: 	this.beforeRender,
-				afterRender: 	this.afterRender,
-				css:			this.css
+				afterRender: 	this.afterRender
 			}, options||{});
 			
 			// transform a tring template into a real UnderscoreJS template
@@ -48,17 +46,7 @@ define([
 			this.parent = this.options.parent;
 			
 			this.options.afterInitialize.apply(this, arguments);
-			
-			// apply custom styles
-			this.$el.css(this.options.css);
-			
-			// auto render "ready" binds to model to be ready!
-			// model's need to extend GeneralModel!!
-			if (this.options.autoRender == 'ready') {
-				try {this.autoRender(this.model.ready())} catch(e) {};
-			} else {
-				this.autoRender();
-			}
+			this.autoRender();
 		},
 		
 		render: function() {
@@ -71,8 +59,6 @@ define([
 			this.options.beforeRender.apply(this, arguments);
 			this.$el.html(this.options.template(this.templateData()));
 			this.options.afterRender.apply(this, arguments);
-			
-			this.trigger('render');
 			return this;
 		},
 		

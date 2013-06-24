@@ -91,83 +91,12 @@ define([
 		return str;		
 	}
 	
-	AppClass.prototype.utils.rpad = function(number, length) {
-		var str = '' + number;
-		while (str.length < length) {
-		    str = str + '0';
-		}
-		return str;		
-	}
-	
 	
 	AppClass.prototype.utils.nl2br = function(str, is_xhtml) {
 		var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
 		return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 	};
 	
-	
-	
-	/**
-	 * return a sortable date string from a javascript date object
-	 * YYYYMMDD[HHMM]
-	 */
-	AppClass.prototype.utils.strDate = function(date, time) {
-		
-		// try to convert timestamp to date object
-		// accept timestamp with or without microseconds!
-		if (!(date instanceof Date)) {
-			try {
-				date = new Date(parseInt(App.utils.rpad(date.toString(), 13)));
-			} catch(e) {
-				return false;
-			}
-		}
-		
-		var str = date.getFullYear() + App.utils.lpad(date.getMonth()+1,2) + App.utils.lpad(date.getDate());
-		if (time == true) {
-			str+= App.utils.lpad(date.getHours());
-			str+= App.utils.lpad(date.getMinutes());
-		}
-		return str;
-	};
-	
-	
-	
-	/**
-	 * create a date object form various string formats
-	 * - timestamp (with or without microseconds); timestam must be at least 10 characters long!
-	 * - sortable date string (20130530) - may conflict with timestamp!
-	 * - today
-	 * - yesterday
-	 * - otherday, yesterday2 (l'altro ieri)
-	 */
-	AppClass.prototype.utils.str2date = function(str) {
-		str = str.toString();
-		var date = false;
-		switch(str) {
-			case 'today':
-				date = new Date();
-				break;
-			case 'yesterday':
-				date = new Date();
-				date.setDate(date.getDate()-1);
-				break;
-			case 'yesterday2':
-			case 'otherday':
-				date: new Date();
-				date.setDate(date.getDate()-2);
-				break;
-			// sortable string "20130530" or timestamp (with or without microseconds
-			default:
-				if (str.length == 8) {
-					date = new Date(str.substring(0, 4), parseInt(str.substring(4, 6))-1, str.substring(6, 8));
-				} else {
-					date = new Date(parseInt(App.utils.rpad(str, 13)));
-				}
-				break;
-		}
-		return date;
-	};
 	
 	
 	return AppClass;

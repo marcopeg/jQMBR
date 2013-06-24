@@ -96,16 +96,6 @@ define([
 	
 	
 	
-	/**
-	 * Implement an history back action configuring a global flag
-	 * used by PageView::show() to apply a reverse transition
-	 */
-	AppClass.prototype.back = function() {
-		this._goingBack = true;
-		window.history.back();
-	};
-	
-	
 	
 	
 	
