@@ -46,12 +46,22 @@ define([
 			
 			// export parent property
 			this.parent = this.options.parent;
+			if (this.parent && !this.options.container && this.options.container !== false) {
+				this.options.container = this.parent;
+			}
 			
-			this.options.afterInitialize.apply(this, arguments);
+			// auto append to existing DOM
+			if (!this.$el.parent().length && this.options.container) {
+				this.appendTo(this.options.container);
+			}
 			
 			// apply custom styles
 			this.$el.css(this.options.css);
 			
+			// -- CALLBACK
+			this.options.afterInitialize.apply(this, arguments);
+			
+			/*
 			// auto render "ready" binds to model to be ready!
 			// model's need to extend GeneralModel!!
 			if (this.options.autoRender == 'ready') {
@@ -59,6 +69,8 @@ define([
 			} else {
 				this.autoRender();
 			}
+			*/
+			this.autoRender();
 		},
 		
 		render: function() {
@@ -80,6 +92,7 @@ define([
 			
 			// build templates variables with data and model namespaces
 			var _data = {};
+			_data['self']					= this;
 			_data[this.options.dataVar] 	= this.options.data;
 			_data[this.options.modelVar]	= this.model || new Backbone.Model();
 			
