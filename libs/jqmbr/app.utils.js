@@ -123,7 +123,7 @@ define([
 			}
 		}
 		
-		var str = date.getFullYear() + App.utils.lpad(date.getMonth()+1,2) + App.utils.lpad(date.getDate());
+		var str = date.getFullYear() + App.utils.lpad(date.getMonth()+1,2) + App.utils.lpad(date.getDate(),2);
 		if (time == true) {
 			str+= App.utils.lpad(date.getHours());
 			str+= App.utils.lpad(date.getMinutes());
