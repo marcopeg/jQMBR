@@ -35,7 +35,8 @@ define([
 				style:		'',
 				attrs:		{},
 				
-				onClick:	this.onClick
+				onClick:	this.onClick,
+				autoRender:	false
 				
 			}, options || {});
 			
@@ -62,9 +63,27 @@ define([
 			
 			this.$el.on('click', _.bind(this.options.onClick, this));
 			
+			// export parent property
+			this.parent = this.options.parent;
+			if (this.parent && !this.options.container && this.options.container !== false) {
+				this.options.container = this.parent;
+			}
+			
+			// auto append to existing DOM
+			if (!this.$el.parent().length && this.options.container) {
+				this.appendTo(this.options.container);
+			}
+			
+			this.autoRender();
 		},
 		
 		render: function() {
+			
+			// auto append to existing DOM
+			if (!this.$el.parent().length && this.options.container) {
+				this.appendTo(this.options.container);
+			}
+			
 			this.$el.button();
 			return this;
 		}
