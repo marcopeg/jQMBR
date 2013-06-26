@@ -22,6 +22,7 @@ define([
 		ready:		AppClass.prototype.utils.View.ready,
 		error:		AppClass.prototype.utils.View.error,
 		setReady:	AppClass.prototype.utils.View.setReady,
+		setError:	AppClass.prototype.utils.View.setError,
 		setFailed:	AppClass.prototype.utils.View.setFailed
 	});
 	
