@@ -62,8 +62,22 @@ define([
 			this.options.onDisclose = this.options.onDisclose || this.options.disclose;
 			this.on('disclose', _.bind(this.options.onDisclose, this));
 			
-			this.options.afterInitialize.apply(this, arguments);
+			// export parent property
+			this.parent = this.options.parent;
+			if (this.parent && !this.options.container && this.options.container !== false) {
+				this.options.container = this.parent;
+			}
 			
+			// auto append to existing DOM
+			if (!this.$el.parent().length && this.options.container) {
+				this.appendTo(this.options.container);
+			}
+			
+			this.options.afterInitialize.apply(this, arguments);
+			this.autoRender();
+			
+			
+			/*
 			// auto render "ready" binds to model to be ready!
 			// model's need to extend GeneralModel!!
 			if (this.options.autoRender == 'ready') {
@@ -71,6 +85,7 @@ define([
 			} else {
 				this.autoRender();
 			}
+			*/
 		},
 		
 		render: function() {

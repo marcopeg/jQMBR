@@ -23,6 +23,8 @@ define([
 	'./view.PageContentView',
 	'./view.PageFooterView',
 	
+	'./view.EntryPageView',
+	
 	'./view.GmapView',
 	'./view.ImagePaneView'
 
@@ -42,6 +44,8 @@ define([
 	PageHeaderView,
 	PageContentView,
 	PageFooterView,
+	
+	EntryPageView,
 	
 	GmapView,
 	ImagePaneView
@@ -64,6 +68,8 @@ define([
 		PageHeaderView:			PageHeaderView,
 		PageContentView:		PageContentView,
 		PageFooterView:			PageFooterView,
+		
+		EntryPageView:			EntryPageView,
 		
 		GmapView:				GmapView,
 		ImagePaneView:			ImagePaneView
