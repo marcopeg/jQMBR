@@ -48,6 +48,7 @@ define([
 				html:			'', // raw HTML content for the page
 				theme:			'c',
 				headerTheme:	'b',
+				footerTheme:	'b',
 				attrs:			{},
 				
 				// back button management
@@ -276,8 +277,10 @@ define([
 	PageView.prototype._initializeFooter = function() {
 		if (this.options.footer === false ) return;
 		if (this.options.footer === true) this.options.content = {};
-		this.footer = new PageFooterView($.extend({}, this.options.footer, {
-			page: this
+		this.footer = new PageFooterView($.extend({}, {
+			theme:		this.options.footerTheme
+		}, this.options.footer, {
+			page: 		this
 		}));
 		this.$el.append(this.footer.$el);
 	};
