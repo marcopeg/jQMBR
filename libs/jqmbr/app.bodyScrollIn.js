@@ -142,8 +142,10 @@ define([
 	 * it is real better to call bodyScrollin($target) in "pagecreate" event!
 	 */
 	$(document).delegate('[data-role="page"]', 'pageshow', function() {
-		var $candidate = $('[data-role="page"]:visible [data-scrollin="true"]');
-		if ($candidate.length) App.bodyScrollin($candidate);
+		setTimeout(function() {
+			var $candidate = $('[data-role="page"]:visible [data-scrollin="true"]');
+			if ($candidate.length) App.bodyScrollin($candidate);
+		}, 10);
 	});
 	
 });
