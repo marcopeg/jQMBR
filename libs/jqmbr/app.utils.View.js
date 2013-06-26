@@ -162,6 +162,7 @@ define([
 	// shortcut to above API
 	AppClass.prototype.utils.View.setReady 		= function(context) {this.ready(true, context)};
 	AppClass.prototype.utils.View.setFailed 	= function(context) {this.ready(false, context)};
+	AppClass.prototype.utils.View.setError 		= function(context) {this.ready(false, context)};
 	
 	AppClass.prototype.utils.View.renderWhenReady = function() {
 		this.ready(this.render, this);
