@@ -29,6 +29,7 @@ define([
 				icon:		'',
 				iconPos:	'',
 				theme:		null,
+				right:		null,
 				
 				id:			'Link' + this.cid.charAt(0).toUpperCase() + this.cid.slice(1),
 				class:		'',
@@ -39,6 +40,11 @@ define([
 				autoRender:	false
 				
 			}, options || {});
+			
+			
+			if (this.options.right == true) {
+				this.options.class += ' ui-btn-right ';
+			}
 			
 			
 			this.$el
@@ -61,7 +67,7 @@ define([
 				this.$el.attr(key, val);
 			}, this);
 			
-			this.$el.on('click', _.bind(this.options.onClick, this));
+			this.$el.on('vclick', _.bind(this.options.onClick, this));
 			
 			// export parent property
 			this.parent = this.options.parent;

@@ -84,7 +84,7 @@ define([
 			}, this)
 		};
 		
-		$.extend(linkOptions.attrs, {
+		linkOptions.attrs = $.extend({}, {
 			"data-rel"			: btn.rel,
 			"data-direction" 	: "reverse"
 		}, btn.attrs);
@@ -95,8 +95,6 @@ define([
 	};
 	
 	PageHeaderView.prototype.onBackBtn = function(e) {};
-	
-		
 	
 	
 	

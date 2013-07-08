@@ -3,7 +3,7 @@
  * JqueryMobile + BackboneJS + RequireJS
  * =====================================
  *
- * PaheView extension configured to act as first page to be loaded into the App
+ * PageView extension configured to act as first page to be loaded into the App
  *
  */
 define([
@@ -19,12 +19,21 @@ define([
 	
 	var EntryPageView = PageView.extend({
 		defaults: function(options) {
-			return $.extend({}, PageView.prototype.defaults.apply(this, options), {
+			return $.extend({}, PageView.prototype.defaults.apply(this, arguments), {
 				autoRender: 	true,
 				loading: 		false,
 				changePage: 	false,
 				backBtn:		false
 			}, this.pageDefaults);
+		},
+		render: function() {
+			PageView.prototype.render.apply(this, arguments);
+			$('body').show();
+			$.mobile.initializePage();
+			return this;
+		},
+		show: function() {
+			return this;
 		}
 	});
 	

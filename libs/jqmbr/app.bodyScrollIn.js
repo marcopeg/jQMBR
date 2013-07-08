@@ -37,6 +37,7 @@ define([
 	
 	
 	AppClass.prototype.bodyScrollin = function($obj) {
+		
 		var $obj = __bodyScrollinObj($obj);
 		
 		// skip items who does not have correct data attributes and already initializated widgets
@@ -56,14 +57,12 @@ define([
 					__updateBodyScrollin($obj, $wrap);
 					dfd.resolveWith(this);
 				} else {
-					//__initBodyScrollin($obj, $wrap, content);
 					__initBodyScrollin($obj, $wrap);
 				}
 			}, this));
 		
 		// or a simple overflowing div behavior
 		} else {
-			$wrap.html(content);
 			dfd.resolveWith(this);
 		}
 		

@@ -53,7 +53,10 @@ require([
 	 * NOTICE: it seem do does not work in some Android devices!
 	 */
 	
-	$('body').fadeIn();
+	// prevent to save hashtags ehrn reloading pages!
+	window.location.hash = "#";
+	
+	$('body').show();
 	$.mobile.initializePage();
 	
 });

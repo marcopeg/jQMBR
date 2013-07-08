@@ -8,7 +8,7 @@
  */
 define([
 	'jquery', 'underscore', 'backbone',
-	'jqmbr/view.GeneralView',
+	'./view.GeneralView',
 	'./view.PageHeaderView',
 	'./view.PageContentView',
 	'./view.PageFooterView',
@@ -79,6 +79,7 @@ define([
 				// bodyScrollin behavior
 				scrollin:		true
 			}, this.pageDefaults);
+			
 		},
 		
 		initialize: function(options) {
@@ -87,15 +88,18 @@ define([
 			this.options = $.extend({}, this.defaults(options), options || {});
 			
 			// these DeferredObjects are solved
+			this._pageinject	= $.Deferred();		// when page is injected into the DOM
 			this._pagecreate 	= $.Deferred();
 			this._pageshow 		= $.Deferred();
 			this._pagehide		= $.Deferred();
 			
 			// loading widget implementation (with autoRender enabled)
-			if (this.options.loading && this.options.autoRender != false) {
-				$.mobile.loading("show");
-				this.ready(function() {$.mobile.loading("show")});
-			}
+			try {
+				if (this.options.loading && this.options.autoRender != false) {
+					$.mobile.loading("show");
+					this.ready(function() {$.mobile.loading("show")});
+				}
+			} catch(e) {};
 			
 			// apply custom attributes
 			_.each($.extend({},{
@@ -112,6 +116,7 @@ define([
 			this._initializeHeader();
 			this._initializeContent();
 			this._initializeFooter();
+			
 			
 			// apply bodyScrollin data attribute
 			// try to restore scroll position when bage get visible
@@ -132,25 +137,21 @@ define([
 			this.options.pageInitialize.apply(this, arguments);
 			
 			// bind jQueryMobile page events
-			/*
-			this.$el.on('pagecreate', 	_.bind(this.options.pageCreate	, this));
-			this.$el.on('pageshow', 	_.bind(this.options.pageShow	, this));
-			this.$el.on('pagehide', 	_.bind(this.options.pageHide	, this));
-			*/
 			this.$el.on('pagecreate', function(e) {
 				that._pagecreate.resolveWith(that);
 				that.options.pageCreate.apply(that, arguments);
 			});
-			
 			this.$el.on('pageshow', function(e) {
 				that._pageshow.resolveWith(that);
 				that.options.pageShow.apply(that, arguments);
 			});
-			
 			this.$el.on('pagehide', function(e) {
 				that._pagehide.resolveWith(that);
 				that.options.pageHide.apply(that, arguments);
 			});
+			
+			// refresh on content changes
+			this.on('contentchanged', _.bind(this.refresh, this));
 			
 			// destroy page on back button option
 			if (this.options.destroyOnBack) {
@@ -165,37 +166,60 @@ define([
 			this.autoRender();
 		},
 		
-		render: function(options) {
+		
+		/**
+		 * Drop HTML into body's DOM
+		 * "_pageinject" deferred is solved when first run!
+		 */
+		create: function(options) {
+			var self 	= this;
+			var _dfd 	= $.Deferred();
+			options 	= $.extend({}, this.options, options||{});
 			
-			options = $.extend({}, this.options, options||{});
-			
-			// loading widget implementation (without autorender enabled)
-			if (options.loading && options.autoRender === false) {
-				$.mobile.loading("show");
-				this.ready(function() {$.mobile.loading("show")});
+			// if page is already dropped into the body there is no need to proceed
+			if (this.$el.parent().length) {
+				_dfd.resolveWith(this);
+				return _dfd.promise();
 			}
 			
-			// callback
-			options.beforePageCreate.apply(this, arguments);
+			// create DOM callback
+			// should return a DeferredObject if complex actions performed!
+			$.when(options.beforePageCreate.apply(this, arguments)).then(function() {
+				
+				// append to body
+				self.$el.appendTo('body');
+				
+				// activate bodyScrollin behavior
+				// page's body can listen to internal DOM changes and update iScroll!
+				if (options.scrollin) {
+					App.bodyScrollin(self.content.$el).done(function() {
+						self.content.observe();
+						self.content.on('contentchanged', function() {
+							self.trigger('contentchanged');
+						});
+					});
+					
+				};
+				
+				// slightly delay page creation to fix strange behavior in Android's fake browser
+				setTimeout(function(){_dfd.resolveWith(self)}, 100);
+				
+			});
 			
-			if (!this.$el.parent().length) {
-				this.$el.appendTo('body');
-			}
+			_dfd.done(function() {
+				self._pageinject.resolveWith(self);
+			});
 			
-			// activate bodyScrollin behavior
-			if (options.scrollin) App.bodyScrollin(this.content.$el);
-			
-			
-			this.show(options);
-			return this;
+			return _dfd.promise();
 		},
+		
 		
 		/**
 		 * Invoke a "changePage" to show that page.
 		 * it listen to 
 		 */
 		show: function(options) {
-		
+			
 			// local options are overridden by every other options!
 			// they are used 
 			var localOptions = {};
@@ -209,11 +233,68 @@ define([
 			options = $.extend({}, localOptions, this.options, options||{});
 			
 			if (options.changePage !== false) {
-				$.mobile.changePage(this.$el, $.extend({}, {
-					dataUrl: options.id
-				}, options || {}, options.changePage));
+				try {
+					$.mobile.changePage(this.$el, $.extend({}, {
+						dataUrl: options.id
+					}, options || {}, options.changePage));
+				} catch(e) {};
 			}
+			
 		},
+		
+		
+		
+		/**
+		 * Complete process of DOM creation and page display
+		 */
+		render: function(options) {
+			var self = this;
+			options = $.extend({}, this.options, options||{});
+			
+			// loading widget implementation (without autorender enabled)
+			try {
+				if (options.loading && options.autoRender === false) {
+					$.mobile.loading("show");
+					this.ready(function() {$.mobile.loading("hide")});
+				}
+			} catch(e) {};
+			
+			// create and show
+			$.when(this.create(options)).then(function() {
+				self.show(options);
+			});
+			
+			return this;
+		},
+		
+		
+		
+		
+		
+		
+		
+		/**
+		 * Refresh a page after content changed
+		 * - triggered by "contentchanged" on content
+		 * - triggered by "contentchanged" on the page itself
+		 *
+		 * it is delayed to let transitions end.
+		 * need a way to wait for all transitions to end!
+		 */
+		refresh: function() {
+			var self = this;
+			clearTimeout(this._refreshTimer);
+			this._refreshTimer = setTimeout(function() {
+				
+				// update iScroll
+				iS = self.content.$el.data('iScroll')
+				if (iS) iS.refresh();
+				
+			}, 500);
+		},
+		
+		
+		
 		
 		remove: function() {
 			this.$el.remove();
@@ -262,6 +343,7 @@ define([
 			page: 		this
 		}));
 		this.$el.append(this.header.$el);
+		
 	};
 	
 	PageView.prototype._initializeContent = function() {
